@@ -1,0 +1,37 @@
+Product page: https://smile.amazon.com/gp/product/B01LC7ECAS
+Supply voltage: 5V
+Size: 82mmx35mmx18 mm
+
+I2C address: 
+
+cross ref product: https://www.amazon.com/Qunqi-Serial-Backlight-Arduino-MEGA2560/dp/B01E4YUT3K
+
+* could only get it to work with fmalpartida "New LiquidCrystal" library from here. https://bitbucket.org/fmalpartida/new-liquidcrystal/wiki/Home
+The address and wiring is:
+    #define I2C_ADDR 0x3F
+and
+    LiquidCrystal_I2C lcd(0x3F, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
+
+full code:
+
+#include <LiquidCrystal_I2C.h>
+#define BACKLIGHT_PIN 13
+LiquidCrystal_I2C lcd(0x3F, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE); // set the LCD address to 0x3F for a 16 chars and 2 line display
+
+void setup()
+{
+    Serial.begin(9600);
+    // Switch on the backlight
+    pinMode ( BACKLIGHT_PIN, OUTPUT );
+    digitalWrite ( BACKLIGHT_PIN, HIGH );
+    lcd.begin(16,2); // initialize the lcd 
+    lcd.home (); // go home
+}
+
+void loop()
+{ 
+    lcd.setCursor (0, 0 );
+    lcd.print("LiquidCrystal");
+    lcd.setCursor (0,1);
+    lcd.print("I2C working");
+}
