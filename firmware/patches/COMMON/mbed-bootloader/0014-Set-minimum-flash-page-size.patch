@@ -1,0 +1,104 @@
+From ee112365f292b59fb68a988ba3af999849e5a91d Mon Sep 17 00:00:00 2001
+From: Kyle Stein <kyle.stein@arm.com>
+Date: Fri, 27 Oct 2017 10:17:49 -0500
+Subject: [PATCH] Set minimum flash write chunk size
+
+flash.get_page_size() returns a value of 1 byte on some systems
+which causes an unacceptably long delay when writing a firmware
+image to internal flash during a FOTA.
+
+according to an mbed-os github issue [1], flash.get_page_size()
+returns the minimum writable size, not an optimal size.
+
+[1] https://github.com/ARMmbed/mbed-os/issues/4966
+
+Signed-off-by: Kyle Stein <kyle.stein@arm.com>
+Signed-off-by: Nic Costa <nic.costa@arm.com>
+---
+ source/active_application.cpp | 34 ++++++++++++++++++++++++++--------
+ 1 file changed, 26 insertions(+), 8 deletions(-)
+
+diff --git a/source/active_application.cpp b/source/active_application.cpp
+index 9a2ca92..b26d004 100755
+--- a/source/active_application.cpp
++++ b/source/active_application.cpp
+@@ -249,6 +249,23 @@ bool eraseActiveFirmware(uint32_t firmwareSize)
+     return (result == 0);
+ }
+ 
++/* returns max size in bytes for a single flash.program() operation
++ *
++ * flash.get_page_size() is a misnomer.  the function returns the minimum
++ * writable size which could be as small as 1 byte.  To avoid unacceptably
++ * long flash write times, we need to write chunks in some multiple of
++ * get_page_size().  note, through trial and error, 1024 is the max
++ * before we start seeing write failures that result in a broken FOTA.
++ *
++ * this should return a size that is:
++ *  1. a multiple of flash.get_page_size()
++ *  2. a factor of BUFFER_SIZE
++ */
++static uint32_t get_write_chunk_size()
++{
++    return std::max(flash.get_page_size(), (uint32_t) 1024);
++}
++
+ bool writeActiveFirmwareHeader(arm_uc_firmware_details_t* details)
+ {
+     tr_debug("writeActiveFirmwareHeader");
+@@ -259,9 +276,9 @@ bool writeActiveFirmwareHeader(arm_uc_firmware_details_t* details)
+     if (details)
+     {
+         /* round up program size to nearest page size */
+-        const uint32_t pageSize = flash.get_page_size();
+-        const uint32_t programSize = (ARM_UC_INTERNAL_HEADER_SIZE_V2 + pageSize - 1)
+-                                     / pageSize * pageSize;
++        const uint32_t chunkSize = get_write_chunk_size();
++        const uint32_t programSize = (ARM_UC_INTERNAL_HEADER_SIZE_V2 + chunkSize - 1)
++                                     / chunkSize * chunkSize;
+ 
+         ASSERT((programSize <= BUFFER_SIZE),
+                "Header program size %" PRIu32 " bigger than buffer %d\r\n",
+@@ -311,6 +328,7 @@ bool writeActiveFirmware(uint32_t index, arm_uc_firmware_details_t* details)
+     if (details)
+     {
+         const uint32_t pageSize = flash.get_page_size();
++        const uint32_t chunkSize = get_write_chunk_size();
+ 
+         /* we require app_start_addr fall on a page size boundary */
+         uint32_t app_start_addr = MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS
+@@ -325,7 +343,7 @@ bool writeActiveFirmware(uint32_t index, arm_uc_firmware_details_t* details)
+         /* round down the read size to a multiple of the page size
+            that still fits inside the main buffer.
+         */
+-        uint32_t readSize = (BUFFER_SIZE / pageSize) * pageSize;
++        uint32_t readSize = (BUFFER_SIZE / chunkSize) * chunkSize;
+ 
+         arm_uc_buffer_t buffer = {
+             .size_max = readSize,
+@@ -363,8 +381,8 @@ bool writeActiveFirmware(uint32_t index, arm_uc_firmware_details_t* details)
+                    filled, round up the program size to include the last page
+                 */
+                 uint32_t programOffset = 0;
+-                uint32_t programSize = (buffer.size + pageSize - 1)
+-                                       / pageSize * pageSize;
++                uint32_t programSize = (buffer.size + chunkSize - 1)
++                                       / chunkSize * chunkSize;
+ 
+                 /* write one page at a time */
+                 while ((programOffset < programSize) &&
+@@ -372,9 +390,9 @@ bool writeActiveFirmware(uint32_t index, arm_uc_firmware_details_t* details)
+                 {
+                     retval = flash.program(&(buffer.ptr[programOffset]),
+                                            app_start_addr + offset + programOffset,
+-                                           pageSize);
++                                           chunkSize);
+ 
+-                    programOffset += pageSize;
++                    programOffset += chunkSize;
+ 
+ #if defined(SHOW_PROGRESS_BAR) && SHOW_PROGRESS_BAR == 1
+                     printProgress(offset + programOffset, details->size);
+-- 
+2.14.2
+
