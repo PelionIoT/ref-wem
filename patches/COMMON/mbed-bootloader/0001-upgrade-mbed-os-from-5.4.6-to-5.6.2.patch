@@ -1,0 +1,23 @@
+From 7768281979e50b1cb74424b2adbc75a8449fc94c Mon Sep 17 00:00:00 2001
+From: Nic Costa <nic.costa@arm.com>
+Date: Wed, 11 Oct 2017 13:50:52 -0500
+Subject: [PATCH 1/2] upgrade mbed-os from 5.4.6 to 5.6.2
+
+bootloader fails to boot when configured for SPI Flash.
+upgrading mbed-os to 5.6.2 seems to fix the issue.
+
+Signed-off-by: Nic Costa <nic.costa@arm.com>
+---
+ mbed-os.lib | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mbed-os.lib b/mbed-os.lib
+index 36fcb21..542fdbd 100644
+--- a/mbed-os.lib
++++ b/mbed-os.lib
+@@ -1 +1 @@
+-https://github.com/ARMmbed/mbed-os/#5fff7e1daeb395aa3d1ecf3f9ec3f4fead3de0c2
++https://github.com/ARMmbed/mbed-os/#6e0d01cd13e8aca7bf4d697c3699ec9225386881
+-- 
+2.14.2
+

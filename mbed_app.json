@@ -1,0 +1,90 @@
+{
+    "config": {
+        "app-label": {
+            "help": "Sets a device friendly name displayed on the LCD",
+            "value": "\"dragonfly\""
+        },
+        "geo-accuracy": {
+            "help": "Sets the accuracy of geo-lat and geo-lon, in meters",
+            "value": null
+        },
+        "geo-lat": {
+            "help": "Sets the device latitude, from -90.0 to 90.0",
+            "value": null
+        },
+        "geo-long": {
+            "help": "Sets the device longitude, from -180 to 180",
+            "value": null
+        },
+        "self-test": {
+            "help": "Run a self-test upon boot",
+            "value": "false"
+        },
+        "spi-clk": {
+            "help": "CLK pin for spi interface",
+            "value": "D13"
+        },
+        "spi-cs": {
+            "help": "CS pin for spi interface",
+            "value": "D10"
+        },
+        "spi-miso": {
+            "help": "MISO pin for spi interface",
+            "value": "D12"
+        },
+        "spi-mosi": {
+            "help": "MOSI pin for spi interface",
+            "value": "D11"
+        },
+        "version": {
+            "help": "Display this version string on the device",
+            "value": "\"1.0\""
+        },
+        "wifi-debug": {
+            "help": "Enable debug output for WiFi drivers",
+            "value": "false"
+        },
+        "wifi-password": {
+            "help": "An optional password for wifi security authentication",
+            "value": "\"\""
+        },
+        "wifi-rx": {
+            "help": "RX pin for serial connection to external device",
+            "value": "D0"
+        },
+        "wifi-security": {
+            "help": "WPA, WPA2, WPA/WPA2, WEP, NONE, OPEN",
+            "value": "\"WPA2\""
+        },
+        "wifi-ssid": {
+            "help": "The SSID to connect to if using a WiFi interface",
+            "value": "\"iotlab\""
+        },
+        "wifi-tx": {
+            "help": "TX pin for serial connection to external device",
+            "value": "D1"
+        }
+    },
+    "macros": [
+        "MBEDTLS_USER_CONFIG_FILE=\"mbedtls_mbed_client_config.h\"",
+        "MBED_CLIENT_USER_CONFIG_FILE=\"mbed_cloud_client_user_config.h\"",
+        "MBED_CLOUD_CLIENT_USER_CONFIG_FILE=\"mbed_cloud_client_user_config.h\"",
+        "SA_PV_OS_MBEDOS",
+        "MBED_CONF_APP_MAIN_STACK_SIZE=4608"
+    ],
+    "target_overrides": {
+        "*": {
+            "lwip.ipv4-enabled": true,
+            "lwip.ipv6-enabled": false,
+            "mbed-client.sn-coap-max-blockwise-payload-size": 512,
+            "mbed-trace.enable": null,
+            "platform.stdio-baud-rate": 115200,
+            "target.features_add": [
+                "COMMON_PAL"
+            ]
+        },
+        "UBLOX_EVK_ODIN_W2": {
+            "target.mbed_app_start": "0x08040400"
+        }
+    }
+}

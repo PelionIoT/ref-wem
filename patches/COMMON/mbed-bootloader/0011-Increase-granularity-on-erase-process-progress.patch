@@ -1,0 +1,135 @@
+From a0cf4ad60e180163431f9b852ed6d9712484ce42 Mon Sep 17 00:00:00 2001
+From: Kyle Stein <Kyle.Stein@arm.com>
+Date: Thu, 19 Oct 2017 11:04:48 -0500
+Subject: [PATCH] Increase granularity on erase process progress
+
+This patch allows the progress bar on the LCD to be updated more
+often while firmware is being erased from flash.  In certain
+hardware configs, a complete erase takes several seconds and gives
+the appearance that the process has stalled.  With this patch the
+firmware is erased in smaller chunks with the progress bar being
+updated accordingly.
+
+Signed-off-by: Kyle Stein <Kyle.Stein@arm.com>
+Signed-off-by: Nic Costa <nic.costa@arm.com>
+---
+ source/active_application.cpp | 49 +++++++++++++++++++++++++++++++++----------
+ 1 file changed, 38 insertions(+), 11 deletions(-)
+
+diff --git a/source/active_application.cpp b/source/active_application.cpp
+index 8b5c97f..63d00a2 100755
+--- a/source/active_application.cpp
++++ b/source/active_application.cpp
+@@ -121,12 +121,12 @@ int checkActiveApplication(arm_uc_firmware_details_t* details)
+             uint32_t appStart = MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS +
+                                 MBED_CONF_APP_FIRMWARE_METADATA_HEADER_SIZE;
+ 
+-            tr_debug("header start: 0x%08" PRIX32,
++            tr_info("header start: 0x%08" PRIX32,
+                      (uint32_t) MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS);
+-            tr_debug("header size: %" PRIu32,
++            tr_info("header size: %" PRIu32,
+                      (uint32_t) MBED_CONF_APP_FIRMWARE_METADATA_HEADER_SIZE);
+-            tr_debug("app start: 0x%08" PRIX32, appStart);
+-            tr_debug("app size: %" PRIu64, details->size);
++            tr_info("app start: 0x%08" PRIX32, appStart);
++            tr_info("app size: %" PRIu64, details->size);
+ 
+             /* initialize hashing facility */
+             palMDHandle_t md = { 0 };
+@@ -147,6 +147,10 @@ int checkActiveApplication(arm_uc_firmware_details_t* details)
+                 status = flash.read(buffer_array,
+                                     appStart + (details->size - remaining),
+                                     readSize);
++                if (0 != status) {
++                    tr_error("failed to read %u bytes from offset 0x%08" PRIX32,
++                             readSize, appStart + (details->size - remaining));
++                }
+ 
+                 /* update hash */
+                 pal_mdUpdate(md, buffer_array, readSize);
+@@ -199,6 +203,7 @@ bool eraseActiveFirmware(uint32_t firmwareSize)
+ 
+     /* get sector size of where the new firmware would end */
+     fota::printProgress(0, 100, "Erasing");
++    tr_info("start flash erase");
+     uint32_t lastSectorSize =
+         flash.get_sector_size(MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS +
+                               MBED_CONF_APP_FIRMWARE_METADATA_HEADER_SIZE +
+@@ -212,16 +217,34 @@ bool eraseActiveFirmware(uint32_t firmwareSize)
+     sizeRoundedUp = ((sizeRoundedUp + lastSectorSize - 1) / lastSectorSize)
+                     * lastSectorSize;
+ 
+-    tr_debug("Erasing from 0x%08" PRIX32 " to 0x%08" PRIX32,
+-             (uint32_t) MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS,
+-             (uint32_t) MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS + sizeRoundedUp);
++    tr_info("erasing from 0x%08" PRIX32 " to 0x%08" PRIX32,
++            (uint32_t) MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS,
++            (uint32_t) MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS + sizeRoundedUp);
+ 
+     /* erase flash to make place for new application */
+-    fota::printProgress(33, 100, "Erasing");
+-    int result = flash.erase(MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS,
+-                             sizeRoundedUp);
+ 
+-    fota::printProgress(100, 100, "Erasing");
++    /* break the erase into chunks which are multiple of sector size each roughly 5%
++       of the total area to be erased */
++    uint32_t sectorsPerChunk = std::max(sizeRoundedUp / lastSectorSize / 20, (uint32_t)1);
++    uint32_t erased = 0;
++    int result = 0;
++    while ((erased < sizeRoundedUp) && (result == 0)) {
++        uint32_t chunkSize = std::min(sectorsPerChunk * lastSectorSize, sizeRoundedUp - erased);
++        result = flash.erase(MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS + erased,
++                             chunkSize);
++        if (result != 0) {
++            tr_warn("Unable to erase ActiveFirmware chunk from 0x%08" PRIX32 " to 0x%08" PRIX32,
++                    (uint32_t) MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS + erased,
++                    (uint32_t) MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS + erased + chunkSize);
++        }
++        tr_info("erased 0x%08" PRIX32 " to 0x%08" PRIX32,
++                (uint32_t)MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS + erased,
++                (uint32_t)MBED_CONF_APP_FIRMWARE_METADATA_HEADER_ADDRESS + erased + chunkSize);
++
++        erased += chunkSize;
++        fota::printProgress(erased, sizeRoundedUp, "Erasing");
++    }
++    tr_info("end flash erase");
+ 
+     return (result == 0);
+ }
+@@ -233,6 +256,7 @@ bool writeActiveFirmwareHeader(arm_uc_firmware_details_t* details)
+     bool result = false;
+ 
+     fota::printProgress(0, 100, "Write HDR");
++    tr_info("start flash HDR write");
+     if (details)
+     {
+         /* round up program size to nearest page size */
+@@ -275,6 +299,7 @@ bool writeActiveFirmwareHeader(arm_uc_firmware_details_t* details)
+         }
+     }
+ 
++    tr_info("end flash HDR write");
+     return result;
+ }
+ 
+@@ -285,6 +310,7 @@ bool writeActiveFirmware(uint32_t index, arm_uc_firmware_details_t* details)
+     bool result = false;
+ 
+     fota::printProgress(0, 100, "Write FW");
++    tr_info("start flash write");
+     if (details)
+     {
+         const uint32_t pageSize = flash.get_page_size();
+@@ -381,6 +407,7 @@ bool writeActiveFirmware(uint32_t index, arm_uc_firmware_details_t* details)
+         result = (retval == 0);
+     }
+ 
++    tr_info("end flash write");
+     return result;
+ }
+ 
+-- 
+2.14.2
+

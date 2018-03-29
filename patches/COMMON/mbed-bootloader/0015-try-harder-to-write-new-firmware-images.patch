@@ -1,0 +1,30 @@
+From 2e1a887e26d9d0a4db53c1f617861c858c49ee8d Mon Sep 17 00:00:00 2001
+From: Nic Costa <nic.costa@arm.com>
+Date: Wed, 1 Nov 2017 15:47:23 -0500
+Subject: [PATCH] try harder to write new firmware images
+
+increased MAX_COPY_RETRIES from 1 to 3 due to intermittent FOTA
+failures related to copying the firmware image from SPI flash
+to internal flash.
+
+Signed-off-by: Nic Costa <nic.costa@arm.com>
+---
+ mbed_app.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mbed_app.json b/mbed_app.json
+index ee3feae..c1cddab 100755
+--- a/mbed_app.json
++++ b/mbed_app.json
+@@ -2,7 +2,7 @@
+     "macros": [
+         "MBEDTLS_USER_CONFIG_FILE=\"mbedtls_mbed_client_config.h\"",
+         "MAX_FIRMWARE_LOCATIONS=2",
+-        "MAX_COPY_RETRIES=1",
++        "MAX_COPY_RETRIES=3",
+         "SHOW_PROGRESS_BAR=1",
+         "MAX_BOOT_RETRIES=3",
+         "PAL_CMAC_SUPPORT=0"
+-- 
+2.14.2
+

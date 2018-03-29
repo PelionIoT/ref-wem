@@ -1,0 +1,82 @@
+From e0b549030e3ab532fbfa3c87536f9dd63b650020 Mon Sep 17 00:00:00 2001
+From: Nic Costa <nic.costa@arm.com>
+Date: Wed, 11 Oct 2017 13:28:50 -0500
+Subject: [PATCH 1/6] Support for external SPI Flash
+
+* Add spif-driver.lib
+* Use the SPIFBlockDevice driver instead of SDBlockDevice if
+  configured in mbed_app.json
+
+Signed-off-by: Nic Costa <nic.costa@arm.com>
+---
+ mbed_app.json   |  5 +++++
+ source/main.cpp | 19 +++++++++++++------
+ spif-driver.lib |  1 +
+ 3 files changed, 19 insertions(+), 6 deletions(-)
+ create mode 100644 spif-driver.lib
+
+diff --git a/mbed_app.json b/mbed_app.json
+index 04d9826..4d10d82 100755
+--- a/mbed_app.json
++++ b/mbed_app.json
+@@ -19,6 +19,11 @@
+         "serial_baudrate": {
+             "help": "Terminal default baudrate",
+             "value": 115200
++        },
++        "spif-spi-cs": "D10",
++        "use-spi-flash": {
++            "help": "Set to true to use SPI Flash or false to use SD card.",
++            "value": "true"
+         }
+     },
+     "target_overrides": {
+diff --git a/source/main.cpp b/source/main.cpp
+index bf808d3..a4fdd3f 100755
+--- a/source/main.cpp
++++ b/source/main.cpp
+@@ -28,7 +28,11 @@
+ #include "update-client-pal-filesystem/arm_uc_pal_filesystem.h"
+ #include "update-client-paal/arm_uc_paal_update.h"
+ #include "update-client-common/arm_uc_types.h"
++#if MBED_CONF_APP_USE_SPI_FLASH
++#include <SPIFBlockDevice.h>
++#else
+ #include "SDBlockDevice.h"
++#endif
+ #include "pal.h"
+ 
+ #include "mbed_bootloader_info.h"
+@@ -54,13 +58,16 @@ const arm_uc_installer_details_t bootloader = {
+ };
+ 
+ /* initialise sd card and filesystem */
+-#if defined(MBED_CONF_APP_SPI_MOSI) && defined(MBED_CONF_APP_SPI_MISO) && \
+-    defined(MBED_CONF_APP_SPI_CLK)  && defined(MBED_CONF_APP_SPI_CS)
+-SDBlockDevice sd(MBED_CONF_APP_SPI_MOSI, MBED_CONF_APP_SPI_MISO,
+-                 MBED_CONF_APP_SPI_CLK,  MBED_CONF_APP_SPI_CS);
++#if MBED_CONF_APP_USE_SPI_FLASH
++SPIFBlockDevice sd(MBED_CONF_SD_SPI_MOSI,
++                   MBED_CONF_SD_SPI_MISO,
++                   MBED_CONF_SD_SPI_CLK,
++                   MBED_CONF_APP_SPIF_SPI_CS);
+ #else
+-SDBlockDevice sd(MBED_CONF_SD_SPI_MOSI, MBED_CONF_SD_SPI_MISO,
+-                 MBED_CONF_SD_SPI_CLK,  MBED_CONF_SD_SPI_CS);
++SDBlockDevice sd(MBED_CONF_SD_SPI_MOSI,
++                 MBED_CONF_SD_SPI_MISO,
++                 MBED_CONF_SD_SPI_CLK,
++                 MBED_CONF_SD_SPI_CS);
+ #endif
+ FATFileSystem fs("sd", &sd);
+ 
+diff --git a/spif-driver.lib b/spif-driver.lib
+new file mode 100644
+index 0000000..f365260
+--- /dev/null
++++ b/spif-driver.lib
+@@ -0,0 +1 @@
++https://github.com/ARMmbed/spif-driver/#c46b2a762d03874eb712250c7849759f9b13a093
+-- 
+2.14.3
+

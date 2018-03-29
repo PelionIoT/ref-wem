@@ -1,0 +1,35 @@
+From ad8dbf1ec76e46649d4a196894fcaf9974c1f57d Mon Sep 17 00:00:00 2001
+From: Laurent MEUNIER <laurent.meunier@st.com>
+Date: Wed, 8 Nov 2017 09:02:21 +0100
+Subject: [PATCH 2/2] STM32F4: Flash: fix 2MB GetSector computation
+
+The computation of the sector number in GetSector for 2MB flash sizes
+consists in adding an extra constant for 2MB dual bank (12 as in
+ADDR_FLASH_SECTOR_12), then going through the same address check as if it
+was an address of the first sector.
+
+That means that we need to modify tmp and address as if it was a first bank
+address, which we're doing here by sub_stracting 0x100000 delta.
+---
+ targets/TARGET_STM/TARGET_STM32F4/flash_api.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/targets/TARGET_STM/TARGET_STM32F4/flash_api.c b/targets/TARGET_STM/TARGET_STM32F4/flash_api.c
+index d3a57dc5f..5ba7fb9e4 100644
+--- a/targets/TARGET_STM/TARGET_STM32F4/flash_api.c
++++ b/targets/TARGET_STM/TARGET_STM32F4/flash_api.c
+@@ -179,8 +179,10 @@ static uint32_t GetSector(uint32_t address)
+     /* This function supports 1Mb and 2Mb flash sizes */
+ #if defined(ADDR_FLASH_SECTOR_16)
+     if (address & 0x100000) { // handle 2nd bank
++        /*  Sector will be at least 12 */
+         sector = FLASH_SECTOR_12;
+-        tmp = address - ADDR_FLASH_SECTOR_12;
++        tmp -= 0x100000;
++        address -= 0x100000;
+     }
+ #endif
+     if (address < ADDR_FLASH_SECTOR_4) { // 16k sectorsize
+-- 
+2.14.3
+
