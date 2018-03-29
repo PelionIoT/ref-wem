@@ -1,0 +1,924 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html">
+<style type="text/css">
+		h1, h2, h3, h4, h5, h6 {
+			font-family : segoe ui;
+			color : black;
+			background-color : #EDE7D9;
+			padding: 0.3em;
+		}
+
+		h1 {
+			font-size: 1.2em;
+		}		
+
+		h2 {
+			font-size: 1.2em;
+		}
+
+		body {
+			font-family : segoe ui;
+		}
+
+		td, th {
+			padding: 0.5em;
+			text-align : left;
+			width: 10em;
+		}
+		th {
+			background-color : #EEEEEE;
+
+		}
+		th.column1, td.column1 {
+			text-align: left;
+			width : auto;
+		}
+		table {
+			width : 100%;
+			font-size: 0.9em;
+		}
+
+		.DRC_summary_header {
+			padding-bottom : 0.1em;
+			border : 0px solid black;
+			width: 100%;
+			align: left;
+		}
+
+		.DRC_summary_header_col1,
+		.DRC_summary_header_col2, 
+		.DRC_summary_header_col3 {
+			color : black;
+			font-size:100%;
+			padding : 0em;
+			padding-top : 0.2em;
+			padding-bottom 0.2em;
+			border : 0px solid black;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.DRC_summary_header_col1 {
+			font-weight: bold;
+			width: 8em;
+		}
+
+		.DRC_summary_header_col2 {
+			width: 0.1em;
+		
+		}
+
+		.DRC_summary_header_col3 {
+			width : auto;
+		}
+
+		.header_holder {
+		    Width = 100%;
+		    border = 0px solid green;
+		    padding = 0;
+		}
+
+
+		.front_matter, .front_matter_column1, .front_matter_column2, .front_matter_column3
+		{
+			left : 0;
+			top : 0;
+			padding: 0em;
+			padding-top : 0.1em;
+			border : 0px solid black;
+			width : 100%;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.front_matter_column1 {
+			width : 8em;
+			font-weight: bold;
+		}
+
+		.front_matter_column2 {
+			width: 0.1em;
+		}
+
+		.front_matter_column3 {
+			width : auto;
+		}
+
+		.total_column1, .total_column {
+			font-weight : bold;
+		}
+		.total_column1 {
+			text-align : left;
+		}
+		.warning, .error {
+			color : red;
+			font-weight : bold;
+		}
+		tr.onmouseout_odd {
+			background-color : #white;
+		}
+		tr.onmouseout_even { 
+			background-color : #FAFAFA;
+		}
+		tr.onmouseover_odd, tr.onmouseover_even { 
+			background-color : #EEEEEE;
+		} 
+		a:link, a:visited, .q a:link,.q a:active,.q {
+			color: #21489e; 
+		}
+		a:link.callback, a:visited.callback { 
+			color: #21489e;
+		}
+		a:link.customize, a:visited.customize {
+			color: #C0C0C0;
+			position: absolute; 
+			right: 10px;
+		}	
+		p.contents_level1 {
+			font-weight : bold;
+			font-size : 110%;
+			margin : 0.5em;
+		}
+		p.contents_level2 {
+			position : relative;
+			left : 20px;
+			margin : 0.5em;
+		}
+	</style><script type="text/javascript">
+		function coordToMils(coord) {
+			var number = coord / 10000;
+			
+			if (number != number.toFixed(3))
+				number = number.toFixed(3);
+
+			return number + 'mil'
+		}
+
+		function coordToMM(coord) {
+			var number = 0.0254 * coord / 10000;
+			
+			if (number != number.toFixed(4))
+				number = number.toFixed(4);
+			
+			return number + 'mm'
+		}
+	
+		function convertCoord(coordNode, units) {
+			for (var i = 0; i < coordNode.childNodes.length; i++) {
+				coordNode.removeChild(coordNode.childNodes[i]);
+			}
+
+			var coord = coordNode.getAttribute('value');
+			if (coord != null) {
+				if (units == 'mm') {
+					textNode = document.createTextNode(coordToMM(coord));
+					coordNode.appendChild(textNode);
+				} else if (units == 'mil') {
+					textNode = document.createTextNode(coordToMils(coord));		
+					coordNode.appendChild(textNode);	
+				}
+			}
+		}
+	
+		function convertUnits(unitNode, units) {
+			for (var i = 0; i < unitNode.childNodes.length; i++) {
+				unitNode.removeChild(unitNode.childNodes[i]);		
+			}
+		
+			textNode = document.createTextNode(units); 
+			unitNode.appendChild(textNode);
+		}
+	
+		function changeUnits(radio_input, units) {
+			if (radio_input.checked) {
+			
+				var elements = document.getElementsByName('coordinate');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertCoord(elements[i], units);
+					}
+				}
+	
+				var elements = document.getElementsByName('units');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertUnits(elements[i], units);
+					}
+				}
+			}
+		}
+	</script><title>Design Rule Verification Report</title>
+</head>
+<body onload=""><img ALT="Altium" src="
+			file://C:\Users\Public\Documents\Altium\AD17\Templates\AD_logo.png
+		"><h1>Design Rule Verification Report</h1>
+<table class="header_holder">
+<td class="column1">
+<table class="front_matter">
+<tr class="front_matter">
+<td class="front_matter_column1">Date:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">11/30/2017</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">3:33:51 PM</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Elapsed Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">00:00:05</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Filename:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3"><a href="file:///C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc" class="file"><acronym title="C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc">C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc</acronym></a></td>
+</tr>
+</table>
+</td>
+<td class="column2">
+<table class="DRC_summary_header">
+<tr>
+<td class="DRC_summary_header_col1">Warnings:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3">0</td></tr>
+<tr>
+<td class="DRC_summary_header_col1">Rule Violations:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3" style="color : red">192</td></tr>
+</table>
+</td>
+</table><a name="IDKJ3VBLW4AY40H5NPL54CA52HQKISZTQZQG5JG2LE5O4ZYEZ1EXNO"><h2>Summary</h2></a><table>
+<tr>
+<th class="column1">Warnings</th>
+<th class="column2">Count</th>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">0</td>
+</tr>
+</table><br><table>
+<tr>
+<th class="column1">Rule Violations</th>
+<th class="column2">Count</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDRJ1FLLVK3D5ZCEXZQZMTIFCDHGHWVB3RADOERXS40AJY3ZX0AMK">Clearance Constraint (Gap=0mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDRSLCBZHBUOUYB2HISZ3Y5KKQ1BDX3YCQMVHMXELFHBG3JQXYHPWJ">Clearance Constraint (Gap=6mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDPY3OP3ABQ3LBJC0V4WB1YJMKSD0XHRBDHKUNPE2PTCHAPSOCWPI">Short-Circuit Constraint (Allowed=No) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDJJR250QM3NV1MRFFPVNURGNDRJTNCFSNMU5PEPH0YOSDT3X5HJQB">Un-Routed Net Constraint ( (All) )</a></td>
+<td class="column2">1</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDMAKKZWQ0RZL3CJUQ1THKSXADPJOTSF0MRQTSAUMAGQL5PB2UB1IK">Modified Polygon (Allow modified: No), (Allow shelved: No)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDW0JXWV4GP2OAFSD4P22DT3VNZIBLCMXN5BRMOXLN0VWYB50BBPPJ">Width Constraint (Min=6mil) (Max=100000mil) (Preferred=10mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDU25MY5CNHNHWJVW5K1VAY1JAZKAFAZ31UIBRL2KFMXZRC511DB5B">Width Constraint (Min=10mil) (Max=10mil) (Preferred=10mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDFOSG43IQ2KH5CJXXH3Z24YWEJLLWOJEZDTWDMTKJ0UYAN1H12N1M">Power Plane Connect Rule(Relief Connect )(Expansion=10mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDV34PG43NMKRIOS2G4QXTWO1MIFNGKM4BHGIO4OLDE3WKIVIKS5PI">Hole Size Constraint (Min=9mil) (Max=100000mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDQKWS20NILOTIDYS0I2KGL5AUYPTPGHWEHHTJYLK4XIH0B0KCCUHB">Hole Size Constraint (Min=1mil) (Max=100mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDACU0AZ0ECJSRPKJV1P30DEQEJIUUWLNQJYQ5HBTDZ5IFP0MJYMB">Hole To Hole Clearance (Gap=10mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#ID2N0QMARSQRS1BBJPUABCIPACWCJUOKVG3VMUWFK3XELCXY1AJM2P">Hole To Hole Clearance (Gap=8mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#ID1X1EF3QIVEIYJ4EYRHMSQHGVTF4EJJXXSBPVUWAC3IOFPX4KIPH">Minimum Solder Mask Sliver (Gap=6mil) (All),(All)</a></td>
+<td class="column2">191</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDULEH5IFDRQA3BKMFBZU05BKZGMKB2IGSJCYW4JNUW11SP3FKUDVE">Silk To Solder Mask (Clearance=10mil) (Disabled)(IsPad),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDJ0FZN2KNG0VHFGS0JZTTGCWSNBO3DJVD5SRFYFPUTPRDUJAAUR4N">Silk to Silk (Clearance=10mil) (Disabled)(All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#ID55PT2H0PFKXGIZ0T2A1LP0UYBE2Q0EONYIOHDKHFVGAVRAG0LNYE">Net Antennae (Tolerance=0mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDH500QQYR5XH3HGYLV5PLX0Z1TKVS2SOVQ15WXPHPNXWXBS0TBISI">Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">192</td>
+</tr>
+</table><br><a name="IDJJR250QM3NV1MRFFPVNURGNDRJTNCFSNMU5PEPH0YOSDT3X5HJQB"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Un-Routed Net Constraint ( (All) )</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2538.674mil|Location2.X=2562.586mil|Location1.Y=1754.882mil|Location2.Y=1785.398mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2538.674mil|Location2.X=2562.586mil|Location1.Y=1754.882mil|Location2.Y=1785.398mil|Absolute=True">Isolated copper: Split Plane  (+3.3V) on L3. Dead copper detected. Copper area is : 266.571 sq. mils</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="ID1X1EF3QIVEIYJ4EYRHMSQHGVTF4EJJXXSBPVUWAC3IOFPX4KIPH"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Minimum Solder Mask Sliver (Gap=6mil) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2826.41mil|Location2.X=2833.66mil|Location1.Y=3849.756mil|Location2.Y=3857.006mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2826.41mil|Location2.X=2833.66mil|Location1.Y=3849.756mil|Location2.Y=3857.006mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (2.792mil &lt; 6mil) Between Pad U1-C18(2792.14mil,3853.59mil) on Top (L1) And Pad U1-TP12(2851.18mil,3853.19mil) on Top (L1) [Top Solder] Mask Sliver [2.792mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.02mil|Location2.X=3325.27mil|Location1.Y=3849.823mil|Location2.Y=3857.073mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.02mil|Location2.X=3325.27mil|Location1.Y=3849.823mil|Location2.Y=3857.073mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.793mil &lt; 6mil) Between Pad U1-A1(3360.04mil,3853.73mil) on Top (L1) And Pad U1-TP11(3300mil,3853.19mil) on Top (L1) [Top Solder] Mask Sliver [3.793mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2826.403mil|Location2.X=2833.653mil|Location1.Y=3947.118mil|Location2.Y=3954.368mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2826.403mil|Location2.X=2833.653mil|Location1.Y=3947.118mil|Location2.Y=3954.368mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.085mil &lt; 6mil) Between Pad U1-C16(2792.14mil,3948.07mil) on Top (L1) And Pad U1-TP10(2851.18mil,3953.19mil) on Top (L1) [Top Solder] Mask Sliver [3.085mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.027mil|Location2.X=3325.277mil|Location1.Y=3946.953mil|Location2.Y=3954.203mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.027mil|Location2.X=3325.277mil|Location1.Y=3946.953mil|Location2.Y=3954.203mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.118mil &lt; 6mil) Between Pad U1-A3(3360.04mil,3947.73mil) on Top (L1) And Pad U1-TP9(3300mil,3953.19mil) on Top (L1) [Top Solder] Mask Sliver [4.118mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2826.383mil|Location2.X=2833.633mil|Location1.Y=4044.479mil|Location2.Y=4051.729mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2826.383mil|Location2.X=2833.633mil|Location1.Y=4044.479mil|Location2.Y=4051.729mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.049mil &lt; 6mil) Between Pad U1-C14(2792.14mil,4042.56mil) on Top (L1) And Pad U1-TP8(2851.18mil,4053.19mil) on Top (L1) [Top Solder] Mask Sliver [4.049mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.045mil|Location2.X=3325.295mil|Location1.Y=4044.556mil|Location2.Y=4051.806mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.045mil|Location2.X=3325.295mil|Location1.Y=4044.556mil|Location2.Y=4051.806mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.983mil &lt; 6mil) Between Pad U1-A5(3360.04mil,4042.73mil) on Top (L1) And Pad U1-TP7(3300mil,4053.19mil) on Top (L1) [Top Solder] Mask Sliver [4.983mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3237.315mil|Location2.X=3244.565mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3237.315mil|Location2.X=3244.565mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.25mil &lt; 6mil) Between Pad U1-24(3240.94mil,3883.11mil) on Top (L1) And Pad U1-D8(3240.94mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [4.25mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3213.695mil|Location2.X=3220.945mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3213.695mil|Location2.X=3220.945mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-D7(3193.7mil,3822.61mil) on Top (L1) And Pad U1-D8(3240.94mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3166.455mil|Location2.X=3173.705mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3166.455mil|Location2.X=3173.705mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-D6(3146.46mil,3822.61mil) on Top (L1) And Pad U1-D7(3193.7mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3190.075mil|Location2.X=3197.325mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3190.075mil|Location2.X=3197.325mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.25mil &lt; 6mil) Between Pad U1-23(3193.7mil,3883.11mil) on Top (L1) And Pad U1-D7(3193.7mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [4.25mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3142.835mil|Location2.X=3150.085mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3142.835mil|Location2.X=3150.085mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.25mil &lt; 6mil) Between Pad U1-22(3146.46mil,3883.11mil) on Top (L1) And Pad U1-D6(3146.46mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [4.25mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3119.21mil|Location2.X=3126.46mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3119.21mil|Location2.X=3126.46mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U1-D5(3099.21mil,3822.61mil) on Top (L1) And Pad U1-D6(3146.46mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3095.585mil|Location2.X=3102.835mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3095.585mil|Location2.X=3102.835mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.25mil &lt; 6mil) Between Pad U1-21(3099.21mil,3883.11mil) on Top (L1) And Pad U1-D5(3099.21mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [4.25mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3071.965mil|Location2.X=3079.215mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3071.965mil|Location2.X=3079.215mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-D4(3051.97mil,3822.61mil) on Top (L1) And Pad U1-D5(3099.21mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3024.72mil|Location2.X=3031.97mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3024.72mil|Location2.X=3031.97mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U1-D3(3004.72mil,3822.61mil) on Top (L1) And Pad U1-D4(3051.97mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3048.345mil|Location2.X=3055.595mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3048.345mil|Location2.X=3055.595mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.25mil &lt; 6mil) Between Pad U1-20(3051.97mil,3883.11mil) on Top (L1) And Pad U1-D4(3051.97mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [4.25mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3001.095mil|Location2.X=3008.345mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3001.095mil|Location2.X=3008.345mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.25mil &lt; 6mil) Between Pad U1-19(3004.72mil,3883.11mil) on Top (L1) And Pad U1-D3(3004.72mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [4.25mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2977.475mil|Location2.X=2984.725mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2977.475mil|Location2.X=2984.725mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-D2(2957.48mil,3822.61mil) on Top (L1) And Pad U1-D3(3004.72mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2930.235mil|Location2.X=2937.485mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2930.235mil|Location2.X=2937.485mil|Location1.Y=3804.2mil|Location2.Y=3811.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-D1(2910.24mil,3822.61mil) on Top (L1) And Pad U1-D2(2957.48mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2953.855mil|Location2.X=2961.105mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2953.855mil|Location2.X=2961.105mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.25mil &lt; 6mil) Between Pad U1-18(2957.48mil,3883.11mil) on Top (L1) And Pad U1-D2(2957.48mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [4.25mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2906.615mil|Location2.X=2913.865mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2906.615mil|Location2.X=2913.865mil|Location1.Y=3857.61mil|Location2.Y=3864.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.25mil &lt; 6mil) Between Pad U1-17(2910.24mil,3883.11mil) on Top (L1) And Pad U1-D1(2910.24mil,3822.61mil) on Top (L1) [Top Solder] Mask Sliver [4.25mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2773.73mil|Location2.X=2780.98mil|Location1.Y=3873.585mil|Location2.Y=3880.835mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2773.73mil|Location2.X=2780.98mil|Location1.Y=3873.585mil|Location2.Y=3880.835mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-C17(2792.14mil,3900.83mil) on Top (L1) And Pad U1-C18(2792.14mil,3853.59mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2773.73mil|Location2.X=2780.98mil|Location1.Y=3920.825mil|Location2.Y=3928.075mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2773.73mil|Location2.X=2780.98mil|Location1.Y=3920.825mil|Location2.Y=3928.075mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-C16(2792.14mil,3948.07mil) on Top (L1) And Pad U1-C17(2792.14mil,3900.83mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2773.73mil|Location2.X=2780.98mil|Location1.Y=3968.07mil|Location2.Y=3975.32mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2773.73mil|Location2.X=2780.98mil|Location1.Y=3968.07mil|Location2.Y=3975.32mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U1-C15(2792.14mil,3995.32mil) on Top (L1) And Pad U1-C16(2792.14mil,3948.07mil) on Top (L1) [Top Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2773.73mil|Location2.X=2780.98mil|Location1.Y=4015.315mil|Location2.Y=4022.565mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2773.73mil|Location2.X=2780.98mil|Location1.Y=4015.315mil|Location2.Y=4022.565mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-C14(2792.14mil,4042.56mil) on Top (L1) And Pad U1-C15(2792.14mil,3995.32mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2773.73mil|Location2.X=2780.98mil|Location1.Y=4062.56mil|Location2.Y=4069.81mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2773.73mil|Location2.X=2780.98mil|Location1.Y=4062.56mil|Location2.Y=4069.81mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U1-C13(2792.14mil,4089.81mil) on Top (L1) And Pad U1-C14(2792.14mil,4042.56mil) on Top (L1) [Top Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2773.73mil|Location2.X=2780.98mil|Location1.Y=4109.805mil|Location2.Y=4117.055mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2773.73mil|Location2.X=2780.98mil|Location1.Y=4109.805mil|Location2.Y=4117.055mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-C12(2791.14mil,4137.05mil) on Top (L1) And Pad U1-C13(2792.14mil,4089.81mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4157.045mil|Location2.Y=4164.295mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4157.045mil|Location2.Y=4164.295mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-C11(2791.14mil,4184.29mil) on Top (L1) And Pad U1-C12(2791.14mil,4137.05mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4204.29mil|Location2.Y=4211.54mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4204.29mil|Location2.Y=4211.54mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U1-C10(2791.14mil,4231.54mil) on Top (L1) And Pad U1-C11(2791.14mil,4184.29mil) on Top (L1) [Top Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4251.535mil|Location2.Y=4258.785mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4251.535mil|Location2.Y=4258.785mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-C9(2791.14mil,4278.78mil) on Top (L1) And Pad U1-C10(2791.14mil,4231.54mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4298.78mil|Location2.Y=4306.03mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4298.78mil|Location2.Y=4306.03mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U1-C8(2791.14mil,4326.03mil) on Top (L1) And Pad U1-C9(2791.14mil,4278.78mil) on Top (L1) [Top Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4346.025mil|Location2.Y=4353.275mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4346.025mil|Location2.Y=4353.275mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-C7(2791.14mil,4373.27mil) on Top (L1) And Pad U1-C8(2791.14mil,4326.03mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4393.265mil|Location2.Y=4400.515mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4393.265mil|Location2.Y=4400.515mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-C6(2791.14mil,4420.51mil) on Top (L1) And Pad U1-C7(2791.14mil,4373.27mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4440.51mil|Location2.Y=4447.76mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4440.51mil|Location2.Y=4447.76mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U1-C5(2791.14mil,4467.76mil) on Top (L1) And Pad U1-C6(2791.14mil,4420.51mil) on Top (L1) [Top Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4487.755mil|Location2.Y=4495.005mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4487.755mil|Location2.Y=4495.005mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-C4(2791.14mil,4515mil) on Top (L1) And Pad U1-C5(2791.14mil,4467.76mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2825.91mil|Location2.X=2833.16mil|Location1.Y=4511.375mil|Location2.Y=4518.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2825.91mil|Location2.X=2833.16mil|Location1.Y=4511.375mil|Location2.Y=4518.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.79mil &lt; 6mil) Between Pad U1-16(2851.18mil,4515mil) on Top (L1) And Pad U1-C4(2791.14mil,4515mil) on Top (L1) [Top Solder] Mask Sliver [3.79mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4535mil|Location2.Y=4542.25mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4535mil|Location2.Y=4542.25mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U1-C3(2791.14mil,4562.25mil) on Top (L1) And Pad U1-C4(2791.14mil,4515mil) on Top (L1) [Top Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2825.91mil|Location2.X=2833.16mil|Location1.Y=4558.625mil|Location2.Y=4565.875mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2825.91mil|Location2.X=2833.16mil|Location1.Y=4558.625mil|Location2.Y=4565.875mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.79mil &lt; 6mil) Between Pad U1-15(2851.18mil,4562.25mil) on Top (L1) And Pad U1-C3(2791.14mil,4562.25mil) on Top (L1) [Top Solder] Mask Sliver [3.79mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4582.245mil|Location2.Y=4589.495mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4582.245mil|Location2.Y=4589.495mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-C2(2791.14mil,4609.49mil) on Top (L1) And Pad U1-C3(2791.14mil,4562.25mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2825.91mil|Location2.X=2833.16mil|Location1.Y=4605.865mil|Location2.Y=4613.115mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2825.91mil|Location2.X=2833.16mil|Location1.Y=4605.865mil|Location2.Y=4613.115mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.79mil &lt; 6mil) Between Pad U1-14(2851.18mil,4609.49mil) on Top (L1) And Pad U1-C2(2791.14mil,4609.49mil) on Top (L1) [Top Solder] Mask Sliver [3.79mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4629.485mil|Location2.Y=4636.735mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2772.73mil|Location2.X=2779.98mil|Location1.Y=4629.485mil|Location2.Y=4636.735mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-C1(2791.14mil,4656.73mil) on Top (L1) And Pad U1-C2(2791.14mil,4609.49mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2825.91mil|Location2.X=2833.16mil|Location1.Y=4653.105mil|Location2.Y=4660.355mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2825.91mil|Location2.X=2833.16mil|Location1.Y=4653.105mil|Location2.Y=4660.355mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.79mil &lt; 6mil) Between Pad U1-13(2851.18mil,4656.73mil) on Top (L1) And Pad U1-C1(2791.14mil,4656.73mil) on Top (L1) [Top Solder] Mask Sliver [3.79mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2906.615mil|Location2.X=2913.865mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2906.615mil|Location2.X=2913.865mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.15mil &lt; 6mil) Between Pad U1-12(2910.24mil,4627.21mil) on Top (L1) And Pad U1-B8(2910.24mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [4.15mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2930.235mil|Location2.X=2937.485mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2930.235mil|Location2.X=2937.485mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-B7(2957.48mil,4687.61mil) on Top (L1) And Pad U1-B8(2910.24mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2977.6mil|Location2.X=2984.85mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2977.6mil|Location2.X=2984.85mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.06mil &lt; 6mil) Between Pad U1-B6(3004.97mil,4687.61mil) on Top (L1) And Pad U1-B7(2957.48mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [4.06mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2953.855mil|Location2.X=2961.105mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2953.855mil|Location2.X=2961.105mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.15mil &lt; 6mil) Between Pad U1-11(2957.48mil,4627.21mil) on Top (L1) And Pad U1-B7(2957.48mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [4.15mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3001.215mil|Location2.X=3008.465mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3001.215mil|Location2.X=3008.465mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.151mil &lt; 6mil) Between Pad U1-10(3004.72mil,4627.21mil) on Top (L1) And Pad U1-B6(3004.97mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [4.151mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3024.845mil|Location2.X=3032.095mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3024.845mil|Location2.X=3032.095mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.57mil &lt; 6mil) Between Pad U1-B5(3051.97mil,4687.61mil) on Top (L1) And Pad U1-B6(3004.97mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [3.57mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3048.345mil|Location2.X=3055.595mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3048.345mil|Location2.X=3055.595mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.15mil &lt; 6mil) Between Pad U1-9(3051.97mil,4627.21mil) on Top (L1) And Pad U1-B5(3051.97mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [4.15mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3071.965mil|Location2.X=3079.215mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3071.965mil|Location2.X=3079.215mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-B4(3099.21mil,4687.61mil) on Top (L1) And Pad U1-B5(3051.97mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3095.585mil|Location2.X=3102.835mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3095.585mil|Location2.X=3102.835mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.15mil &lt; 6mil) Between Pad U1-8(3099.21mil,4627.21mil) on Top (L1) And Pad U1-B4(3099.21mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [4.15mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3119.21mil|Location2.X=3126.46mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3119.21mil|Location2.X=3126.46mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U1-B3(3146.46mil,4687.61mil) on Top (L1) And Pad U1-B4(3099.21mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3142.835mil|Location2.X=3150.085mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3142.835mil|Location2.X=3150.085mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.15mil &lt; 6mil) Between Pad U1-7(3146.46mil,4627.21mil) on Top (L1) And Pad U1-B3(3146.46mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [4.15mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3166.455mil|Location2.X=3173.705mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3166.455mil|Location2.X=3173.705mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-B2(3193.7mil,4687.61mil) on Top (L1) And Pad U1-B3(3146.46mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3213.735mil|Location2.X=3220.985mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3213.735mil|Location2.X=3220.985mil|Location1.Y=4669.2mil|Location2.Y=4676.45mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.89mil &lt; 6mil) Between Pad U1-B1(3241.02mil,4687.61mil) on Top (L1) And Pad U1-B2(3193.7mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [3.89mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3190.075mil|Location2.X=3197.325mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3190.075mil|Location2.X=3197.325mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.15mil &lt; 6mil) Between Pad U1-6(3193.7mil,4627.21mil) on Top (L1) And Pad U1-B2(3193.7mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [4.15mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3237.353mil|Location2.X=3244.603mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3237.353mil|Location2.X=3244.603mil|Location1.Y=4645.41mil|Location2.Y=4652.66mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.15mil &lt; 6mil) Between Pad U1-5(3240.94mil,4627.21mil) on Top (L1) And Pad U1-B1(3241.02mil,4687.61mil) on Top (L1) [Top Solder] Mask Sliver [4.15mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.02mil|Location2.X=3325.27mil|Location1.Y=4653.105mil|Location2.Y=4660.355mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.02mil|Location2.X=3325.27mil|Location1.Y=4653.105mil|Location2.Y=4660.355mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.79mil &lt; 6mil) Between Pad U1-4(3300mil,4656.73mil) on Top (L1) And Pad U1-A18(3360.04mil,4656.73mil) on Top (L1) [Top Solder] Mask Sliver [3.79mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4629.605mil|Location2.Y=4636.855mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4629.605mil|Location2.Y=4636.855mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.57mil &lt; 6mil) Between Pad U1-A17(3360.04mil,4609.73mil) on Top (L1) And Pad U1-A18(3360.04mil,4656.73mil) on Top (L1) [Top Solder] Mask Sliver [3.57mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.02mil|Location2.X=3325.27mil|Location1.Y=4605.98mil|Location2.Y=4613.23mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.02mil|Location2.X=3325.27mil|Location1.Y=4605.98mil|Location2.Y=4613.23mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.791mil &lt; 6mil) Between Pad U1-3(3300mil,4609.49mil) on Top (L1) And Pad U1-A17(3360.04mil,4609.73mil) on Top (L1) [Top Solder] Mask Sliver [3.791mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4582.365mil|Location2.Y=4589.615mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4582.365mil|Location2.Y=4589.615mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.05mil &lt; 6mil) Between Pad U1-A16(3360.04mil,4562.25mil) on Top (L1) And Pad U1-A17(3360.04mil,4609.73mil) on Top (L1) [Top Solder] Mask Sliver [4.05mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.02mil|Location2.X=3325.27mil|Location1.Y=4558.625mil|Location2.Y=4565.875mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.02mil|Location2.X=3325.27mil|Location1.Y=4558.625mil|Location2.Y=4565.875mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.79mil &lt; 6mil) Between Pad U1-2(3300mil,4562.25mil) on Top (L1) And Pad U1-A16(3360.04mil,4562.25mil) on Top (L1) [Top Solder] Mask Sliver [3.79mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4535mil|Location2.Y=4542.25mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4535mil|Location2.Y=4542.25mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U1-A15(3360.04mil,4515mil) on Top (L1) And Pad U1-A16(3360.04mil,4562.25mil) on Top (L1) [Top Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.02mil|Location2.X=3325.27mil|Location1.Y=4511.375mil|Location2.Y=4518.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3318.02mil|Location2.X=3325.27mil|Location1.Y=4511.375mil|Location2.Y=4518.625mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.79mil &lt; 6mil) Between Pad U1-1(3300mil,4515mil) on Top (L1) And Pad U1-A15(3360.04mil,4515mil) on Top (L1) [Top Solder] Mask Sliver [3.79mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4487.755mil|Location2.Y=4495.005mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4487.755mil|Location2.Y=4495.005mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-A14(3360.04mil,4467.76mil) on Top (L1) And Pad U1-A15(3360.04mil,4515mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4440.51mil|Location2.Y=4447.76mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4440.51mil|Location2.Y=4447.76mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U1-A13(3360.04mil,4420.51mil) on Top (L1) And Pad U1-A14(3360.04mil,4467.76mil) on Top (L1) [Top Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4393.265mil|Location2.Y=4400.515mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4393.265mil|Location2.Y=4400.515mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-A12(3360.04mil,4373.27mil) on Top (L1) And Pad U1-A13(3360.04mil,4420.51mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4346.025mil|Location2.Y=4353.275mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4346.025mil|Location2.Y=4353.275mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-A11(3360.04mil,4326.03mil) on Top (L1) And Pad U1-A12(3360.04mil,4373.27mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4298.78mil|Location2.Y=4306.03mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4298.78mil|Location2.Y=4306.03mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U1-A10(3360.04mil,4278.78mil) on Top (L1) And Pad U1-A11(3360.04mil,4326.03mil) on Top (L1) [Top Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4251.535mil|Location2.Y=4258.785mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4251.535mil|Location2.Y=4258.785mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-A9(3360.04mil,4231.54mil) on Top (L1) And Pad U1-A10(3360.04mil,4278.78mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4204.29mil|Location2.Y=4211.54mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4204.29mil|Location2.Y=4211.54mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U1-A8(3360.04mil,4184.29mil) on Top (L1) And Pad U1-A9(3360.04mil,4231.54mil) on Top (L1) [Top Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4157.045mil|Location2.Y=4164.295mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4157.045mil|Location2.Y=4164.295mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U1-A7(3360.04mil,4137.05mil) on Top (L1) And Pad U1-A8(3360.04mil,4184.29mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4109.765mil|Location2.Y=4117.015mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4109.765mil|Location2.Y=4117.015mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.89mil &lt; 6mil) Between Pad U1-A6(3360.04mil,4089.73mil) on Top (L1) And Pad U1-A7(3360.04mil,4137.05mil) on Top (L1) [Top Solder] Mask Sliver [3.89mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4062.605mil|Location2.Y=4069.855mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4062.605mil|Location2.Y=4069.855mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.57mil &lt; 6mil) Between Pad U1-A5(3360.04mil,4042.73mil) on Top (L1) And Pad U1-A6(3360.04mil,4089.73mil) on Top (L1) [Top Solder] Mask Sliver [3.57mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4015.605mil|Location2.Y=4022.855mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=4015.605mil|Location2.Y=4022.855mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.57mil &lt; 6mil) Between Pad U1-A4(3360.04mil,3995.73mil) on Top (L1) And Pad U1-A5(3360.04mil,4042.73mil) on Top (L1) [Top Solder] Mask Sliver [3.57mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=3968.105mil|Location2.Y=3975.355mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=3968.105mil|Location2.Y=3975.355mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (4.57mil &lt; 6mil) Between Pad U1-A3(3360.04mil,3947.73mil) on Top (L1) And Pad U1-A4(3360.04mil,3995.73mil) on Top (L1) [Top Solder] Mask Sliver [4.57mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=3920.605mil|Location2.Y=3927.855mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=3920.605mil|Location2.Y=3927.855mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.57mil &lt; 6mil) Between Pad U1-A2(3360.04mil,3900.73mil) on Top (L1) And Pad U1-A3(3360.04mil,3947.73mil) on Top (L1) [Top Solder] Mask Sliver [3.57mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=3873.605mil|Location2.Y=3880.855mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3341.63mil|Location2.X=3348.88mil|Location1.Y=3873.605mil|Location2.Y=3880.855mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.57mil &lt; 6mil) Between Pad U1-A1(3360.04mil,3853.73mil) on Top (L1) And Pad U1-A2(3360.04mil,3900.73mil) on Top (L1) [Top Solder] Mask Sliver [3.57mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3318.695mil|Location2.Y=3325.945mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3318.695mil|Location2.Y=3325.945mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-37(2330.08mil,3312.48mil) on Top (L1) And Pad U11-38(2330.08mil,3336.1mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3299.01mil|Location2.Y=3306.26mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3299.01mil|Location2.Y=3306.26mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-36(2330.08mil,3292.79mil) on Top (L1) And Pad U11-37(2330.08mil,3312.48mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3279.325mil|Location2.Y=3286.575mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3279.325mil|Location2.Y=3286.575mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-35(2330.08mil,3273.11mil) on Top (L1) And Pad U11-36(2330.08mil,3292.79mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3259.64mil|Location2.Y=3266.89mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3259.64mil|Location2.Y=3266.89mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-34(2330.08mil,3253.42mil) on Top (L1) And Pad U11-35(2330.08mil,3273.11mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3239.955mil|Location2.Y=3247.205mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3239.955mil|Location2.Y=3247.205mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-33(2330.08mil,3233.74mil) on Top (L1) And Pad U11-34(2330.08mil,3253.42mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3220.27mil|Location2.Y=3227.52mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3220.27mil|Location2.Y=3227.52mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-32(2330.08mil,3214.05mil) on Top (L1) And Pad U11-33(2330.08mil,3233.74mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3200.585mil|Location2.Y=3207.835mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3200.585mil|Location2.Y=3207.835mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-31(2330.08mil,3194.37mil) on Top (L1) And Pad U11-32(2330.08mil,3214.05mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3180.9mil|Location2.Y=3188.15mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3180.9mil|Location2.Y=3188.15mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-30(2330.08mil,3174.68mil) on Top (L1) And Pad U11-31(2330.08mil,3194.37mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3161.215mil|Location2.Y=3168.465mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3161.215mil|Location2.Y=3168.465mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-29(2330.08mil,3155mil) on Top (L1) And Pad U11-30(2330.08mil,3174.68mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3141.53mil|Location2.Y=3148.78mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3141.53mil|Location2.Y=3148.78mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-28(2330.08mil,3135.31mil) on Top (L1) And Pad U11-29(2330.08mil,3155mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3121.845mil|Location2.Y=3129.095mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3121.845mil|Location2.Y=3129.095mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-27(2330.08mil,3115.63mil) on Top (L1) And Pad U11-28(2330.08mil,3135.31mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3102.16mil|Location2.Y=3109.41mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3102.16mil|Location2.Y=3109.41mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-26(2330.08mil,3095.94mil) on Top (L1) And Pad U11-27(2330.08mil,3115.63mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3082.475mil|Location2.Y=3089.725mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3082.475mil|Location2.Y=3089.725mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-25(2330.08mil,3076.26mil) on Top (L1) And Pad U11-26(2330.08mil,3095.94mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3062.79mil|Location2.Y=3070.04mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3062.79mil|Location2.Y=3070.04mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-24(2330.08mil,3056.57mil) on Top (L1) And Pad U11-25(2330.08mil,3076.26mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3043.105mil|Location2.Y=3050.355mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3043.105mil|Location2.Y=3050.355mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-23(2330.08mil,3036.89mil) on Top (L1) And Pad U11-24(2330.08mil,3056.57mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3023.42mil|Location2.Y=3030.67mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3023.42mil|Location2.Y=3030.67mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-22(2330.08mil,3017.2mil) on Top (L1) And Pad U11-23(2330.08mil,3036.89mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3003.735mil|Location2.Y=3010.985mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=3003.735mil|Location2.Y=3010.985mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-21(2330.08mil,2997.52mil) on Top (L1) And Pad U11-22(2330.08mil,3017.2mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=2984.055mil|Location2.Y=2991.305mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2295.88mil|Location2.X=2303.13mil|Location1.Y=2984.055mil|Location2.Y=2991.305mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-20(2330.08mil,2973.9mil) on Top (L1) And Pad U11-21(2330.08mil,2997.52mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=2984.055mil|Location2.Y=2991.305mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=2984.055mil|Location2.Y=2991.305mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-18(2089.92mil,2997.52mil) on Top (L1) And Pad U11-19(2089.92mil,2973.9mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3003.735mil|Location2.Y=3010.985mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3003.735mil|Location2.Y=3010.985mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-17(2089.92mil,3017.2mil) on Top (L1) And Pad U11-18(2089.92mil,2997.52mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3023.42mil|Location2.Y=3030.67mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3023.42mil|Location2.Y=3030.67mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-16(2089.92mil,3036.89mil) on Top (L1) And Pad U11-17(2089.92mil,3017.2mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3043.105mil|Location2.Y=3050.355mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3043.105mil|Location2.Y=3050.355mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-15(2089.92mil,3056.57mil) on Top (L1) And Pad U11-16(2089.92mil,3036.89mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3062.79mil|Location2.Y=3070.04mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3062.79mil|Location2.Y=3070.04mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-14(2089.92mil,3076.26mil) on Top (L1) And Pad U11-15(2089.92mil,3056.57mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3082.475mil|Location2.Y=3089.725mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3082.475mil|Location2.Y=3089.725mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-13(2089.92mil,3095.94mil) on Top (L1) And Pad U11-14(2089.92mil,3076.26mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3102.16mil|Location2.Y=3109.41mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3102.16mil|Location2.Y=3109.41mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-12(2089.92mil,3115.63mil) on Top (L1) And Pad U11-13(2089.92mil,3095.94mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3121.845mil|Location2.Y=3129.095mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3121.845mil|Location2.Y=3129.095mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-11(2089.92mil,3135.31mil) on Top (L1) And Pad U11-12(2089.92mil,3115.63mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3141.53mil|Location2.Y=3148.78mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3141.53mil|Location2.Y=3148.78mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-10(2089.92mil,3155mil) on Top (L1) And Pad U11-11(2089.92mil,3135.31mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3161.215mil|Location2.Y=3168.465mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3161.215mil|Location2.Y=3168.465mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-9(2089.92mil,3174.68mil) on Top (L1) And Pad U11-10(2089.92mil,3155mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3180.9mil|Location2.Y=3188.15mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3180.9mil|Location2.Y=3188.15mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-8(2089.92mil,3194.37mil) on Top (L1) And Pad U11-9(2089.92mil,3174.68mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3200.585mil|Location2.Y=3207.835mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3200.585mil|Location2.Y=3207.835mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-7(2089.92mil,3214.05mil) on Top (L1) And Pad U11-8(2089.92mil,3194.37mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3220.27mil|Location2.Y=3227.52mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3220.27mil|Location2.Y=3227.52mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-6(2089.92mil,3233.74mil) on Top (L1) And Pad U11-7(2089.92mil,3214.05mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3239.955mil|Location2.Y=3247.205mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3239.955mil|Location2.Y=3247.205mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-5(2089.92mil,3253.42mil) on Top (L1) And Pad U11-6(2089.92mil,3233.74mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3259.64mil|Location2.Y=3266.89mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3259.64mil|Location2.Y=3266.89mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-4(2089.92mil,3273.11mil) on Top (L1) And Pad U11-5(2089.92mil,3253.42mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3279.325mil|Location2.Y=3286.575mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3279.325mil|Location2.Y=3286.575mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-3(2089.92mil,3292.79mil) on Top (L1) And Pad U11-4(2089.92mil,3273.11mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3299.01mil|Location2.Y=3306.26mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3299.01mil|Location2.Y=3306.26mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U11-2(2089.92mil,3312.48mil) on Top (L1) And Pad U11-3(2089.92mil,3292.79mil) on Top (L1) [Top Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3318.695mil|Location2.Y=3325.945mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2055.72mil|Location2.X=2062.97mil|Location1.Y=3318.695mil|Location2.Y=3325.945mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U11-1(2089.92mil,3336.1mil) on Top (L1) And Pad U11-2(2089.92mil,3312.48mil) on Top (L1) [Top Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2227.885mil|Location2.X=2235.135mil|Location1.Y=2321.96mil|Location2.Y=2329.21mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2227.885mil|Location2.X=2235.135mil|Location1.Y=2321.96mil|Location2.Y=2329.21mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U14-2(2252.24mil,2312.79mil) on Top (L1) And Pad U14-1(2252.24mil,2338.38mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2227.885mil|Location2.X=2235.135mil|Location1.Y=2296.37mil|Location2.Y=2303.62mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2227.885mil|Location2.X=2235.135mil|Location1.Y=2296.37mil|Location2.Y=2303.62mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U14-3(2252.24mil,2287.2mil) on Top (L1) And Pad U14-2(2252.24mil,2312.79mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2227.885mil|Location2.X=2235.135mil|Location1.Y=2270.78mil|Location2.Y=2278.03mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2227.885mil|Location2.X=2235.135mil|Location1.Y=2270.78mil|Location2.Y=2278.03mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U14-4(2252.24mil,2261.61mil) on Top (L1) And Pad U14-3(2252.24mil,2287.2mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2300.78mil|Location2.X=2308.03mil|Location1.Y=2197.885mil|Location2.Y=2205.135mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2300.78mil|Location2.X=2308.03mil|Location1.Y=2197.885mil|Location2.Y=2205.135mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U14-6(2317.2mil,2222.24mil) on Top (L1) And Pad U14-5(2291.61mil,2222.24mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2326.37mil|Location2.X=2333.62mil|Location1.Y=2197.885mil|Location2.Y=2205.135mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2326.37mil|Location2.X=2333.62mil|Location1.Y=2197.885mil|Location2.Y=2205.135mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U14-7(2342.79mil,2222.24mil) on Top (L1) And Pad U14-6(2317.2mil,2222.24mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2351.96mil|Location2.X=2359.21mil|Location1.Y=2197.885mil|Location2.Y=2205.135mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2351.96mil|Location2.X=2359.21mil|Location1.Y=2197.885mil|Location2.Y=2205.135mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U14-8(2368.38mil,2222.24mil) on Top (L1) And Pad U14-7(2342.79mil,2222.24mil) on Top (L1) [Top Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2490.273mil|Location2.X=2497.523mil|Location1.Y=1795.84mil|Location2.Y=1803.09mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2490.273mil|Location2.X=2497.523mil|Location1.Y=1795.84mil|Location2.Y=1803.09mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-1(2472.64mil,1809.37mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2490.273mil|Location2.X=2497.523mil|Location1.Y=1776.16mil|Location2.Y=1783.41mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2490.273mil|Location2.X=2497.523mil|Location1.Y=1776.16mil|Location2.Y=1783.41mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-2(2472.64mil,1789.69mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2490.273mil|Location2.X=2497.523mil|Location1.Y=1756.47mil|Location2.Y=1763.72mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2490.273mil|Location2.X=2497.523mil|Location1.Y=1756.47mil|Location2.Y=1763.72mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-3(2472.64mil,1770mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2490.273mil|Location2.X=2497.523mil|Location1.Y=1736.79mil|Location2.Y=1744.04mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2490.273mil|Location2.X=2497.523mil|Location1.Y=1736.79mil|Location2.Y=1744.04mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-4(2472.64mil,1750.32mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2490.273mil|Location2.X=2497.523mil|Location1.Y=1717.1mil|Location2.Y=1724.35mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2490.273mil|Location2.X=2497.523mil|Location1.Y=1717.1mil|Location2.Y=1724.35mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-5(2472.64mil,1730.63mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2497.1mil|Location2.X=2504.35mil|Location1.Y=1710.273mil|Location2.Y=1717.523mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2497.1mil|Location2.X=2504.35mil|Location1.Y=1710.273mil|Location2.Y=1717.523mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-6(2510.63mil,1692.64mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2516.79mil|Location2.X=2524.04mil|Location1.Y=1710.273mil|Location2.Y=1717.523mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2516.79mil|Location2.X=2524.04mil|Location1.Y=1710.273mil|Location2.Y=1717.523mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-7(2530.32mil,1692.64mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2536.47mil|Location2.X=2543.72mil|Location1.Y=1710.273mil|Location2.Y=1717.523mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2536.47mil|Location2.X=2543.72mil|Location1.Y=1710.273mil|Location2.Y=1717.523mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-8(2550mil,1692.64mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2556.16mil|Location2.X=2563.41mil|Location1.Y=1710.273mil|Location2.Y=1717.523mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2556.16mil|Location2.X=2563.41mil|Location1.Y=1710.273mil|Location2.Y=1717.523mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-9(2569.69mil,1692.64mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2575.84mil|Location2.X=2583.09mil|Location1.Y=1710.273mil|Location2.Y=1717.523mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2575.84mil|Location2.X=2583.09mil|Location1.Y=1710.273mil|Location2.Y=1717.523mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-10(2589.37mil,1692.64mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2602.477mil|Location2.X=2609.727mil|Location1.Y=1717.1mil|Location2.Y=1724.35mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2602.477mil|Location2.X=2609.727mil|Location1.Y=1717.1mil|Location2.Y=1724.35mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-11(2627.36mil,1730.63mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2602.477mil|Location2.X=2609.727mil|Location1.Y=1736.79mil|Location2.Y=1744.04mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2602.477mil|Location2.X=2609.727mil|Location1.Y=1736.79mil|Location2.Y=1744.04mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-12(2627.36mil,1750.32mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2602.477mil|Location2.X=2609.727mil|Location1.Y=1756.47mil|Location2.Y=1763.72mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2602.477mil|Location2.X=2609.727mil|Location1.Y=1756.47mil|Location2.Y=1763.72mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-13(2627.36mil,1770mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2602.477mil|Location2.X=2609.727mil|Location1.Y=1776.16mil|Location2.Y=1783.41mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2602.477mil|Location2.X=2609.727mil|Location1.Y=1776.16mil|Location2.Y=1783.41mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-14(2627.36mil,1789.69mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2602.477mil|Location2.X=2609.727mil|Location1.Y=1795.84mil|Location2.Y=1803.09mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2602.477mil|Location2.X=2609.727mil|Location1.Y=1795.84mil|Location2.Y=1803.09mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-15(2627.36mil,1809.37mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2575.84mil|Location2.X=2583.09mil|Location1.Y=1822.477mil|Location2.Y=1829.727mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2575.84mil|Location2.X=2583.09mil|Location1.Y=1822.477mil|Location2.Y=1829.727mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-16(2589.37mil,1847.36mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2556.16mil|Location2.X=2563.41mil|Location1.Y=1822.477mil|Location2.Y=1829.727mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2556.16mil|Location2.X=2563.41mil|Location1.Y=1822.477mil|Location2.Y=1829.727mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-17(2569.69mil,1847.36mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2536.47mil|Location2.X=2543.72mil|Location1.Y=1822.477mil|Location2.Y=1829.727mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2536.47mil|Location2.X=2543.72mil|Location1.Y=1822.477mil|Location2.Y=1829.727mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-18(2550mil,1847.36mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2516.79mil|Location2.X=2524.04mil|Location1.Y=1822.477mil|Location2.Y=1829.727mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2516.79mil|Location2.X=2524.04mil|Location1.Y=1822.477mil|Location2.Y=1829.727mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-19(2530.32mil,1847.36mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2497.1mil|Location2.X=2504.35mil|Location1.Y=1822.477mil|Location2.Y=1829.727mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2497.1mil|Location2.X=2504.35mil|Location1.Y=1822.477mil|Location2.Y=1829.727mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.775mil &lt; 6mil) Between Pad U15-21(2550mil,1770mil) on Top (L1) And Pad U15-20(2510.63mil,1847.36mil) on Top (L1) [Top Solder] Mask Sliver [5.775mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3006.657mil|Location2.X=3013.907mil|Location1.Y=999.15mil|Location2.Y=1006.4mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3006.657mil|Location2.X=3013.907mil|Location1.Y=999.15mil|Location2.Y=1006.4mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.355mil &lt; 6mil) Between Pad CON2-GND3(2976.57mil,1020.55mil) on Bottom (L4) And Pad CON2-GND(3023.82mil,1040.24mil) on Bottom (L4) [Bottom Solder] Mask Sliver [1.355mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3136.77mil|Location2.X=3144.02mil|Location1.Y=969.68mil|Location2.Y=976.93mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3136.77mil|Location2.X=3144.02mil|Location1.Y=969.68mil|Location2.Y=976.93mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad CON2-GND2(3173.43mil,1020.55mil) on Bottom (L4) And Pad CON2-GND1(3191.14mil,930mil) on Bottom (L4) [Bottom Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3136.093mil|Location2.X=3143.343mil|Location1.Y=999.15mil|Location2.Y=1006.4mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3136.093mil|Location2.X=3143.343mil|Location1.Y=999.15mil|Location2.Y=1006.4mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.355mil &lt; 6mil) Between Pad CON2-VBUS(3126.18mil,1040.24mil) on Bottom (L4) And Pad CON2-GND2(3173.43mil,1020.55mil) on Bottom (L4) [Bottom Solder] Mask Sliver [1.355mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2939.91mil|Location2.X=2947.16mil|Location1.Y=969.68mil|Location2.Y=976.93mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2939.91mil|Location2.X=2947.16mil|Location1.Y=969.68mil|Location2.Y=976.93mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad CON2-GND4(2958.86mil,930mil) on Bottom (L4) And Pad CON2-GND3(2976.57mil,1020.55mil) on Bottom (L4) [Bottom Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4015.9mil|Location2.X=4023.15mil|Location1.Y=4368.55mil|Location2.Y=4375.8mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4015.9mil|Location2.X=4023.15mil|Location1.Y=4368.55mil|Location2.Y=4375.8mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U9-7(4009.68mil,4387mil) on Bottom (L4) And Pad U9-8(4029.37mil,4387mil) on Bottom (L4) [Bottom Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3996.215mil|Location2.X=4003.465mil|Location1.Y=4368.55mil|Location2.Y=4375.8mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3996.215mil|Location2.X=4003.465mil|Location1.Y=4368.55mil|Location2.Y=4375.8mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U9-6(3990mil,4387mil) on Bottom (L4) And Pad U9-7(4009.68mil,4387mil) on Bottom (L4) [Bottom Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3976.53mil|Location2.X=3983.78mil|Location1.Y=4368.55mil|Location2.Y=4375.8mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3976.53mil|Location2.X=3983.78mil|Location1.Y=4368.55mil|Location2.Y=4375.8mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U9-5(3970.31mil,4387mil) on Bottom (L4) And Pad U9-6(3990mil,4387mil) on Bottom (L4) [Bottom Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3976.53mil|Location2.X=3983.78mil|Location1.Y=4276.03mil|Location2.Y=4283.28mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3976.53mil|Location2.X=3983.78mil|Location1.Y=4276.03mil|Location2.Y=4283.28mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U9-3(3990mil,4294.48mil) on Bottom (L4) And Pad U9-4(3970.31mil,4294.48mil) on Bottom (L4) [Bottom Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3996.215mil|Location2.X=4003.465mil|Location1.Y=4276.03mil|Location2.Y=4283.28mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3996.215mil|Location2.X=4003.465mil|Location1.Y=4276.03mil|Location2.Y=4283.28mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.84mil &lt; 6mil) Between Pad U9-2(4009.68mil,4294.48mil) on Bottom (L4) And Pad U9-3(3990mil,4294.48mil) on Bottom (L4) [Bottom Solder] Mask Sliver [1.84mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4015.9mil|Location2.X=4023.15mil|Location1.Y=4276.03mil|Location2.Y=4283.28mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4015.9mil|Location2.X=4023.15mil|Location1.Y=4276.03mil|Location2.Y=4283.28mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (1.85mil &lt; 6mil) Between Pad U9-1(4029.37mil,4294.48mil) on Bottom (L4) And Pad U9-2(4009.68mil,4294.48mil) on Bottom (L4) [Bottom Solder] Mask Sliver [1.85mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4376.845mil|Location2.X=4384.095mil|Location1.Y=4005.41mil|Location2.Y=4012.66mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4376.845mil|Location2.X=4384.095mil|Location1.Y=4005.41mil|Location2.Y=4012.66mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U10-6(4350.94mil,4005.59mil) on Bottom (L4) And Pad U10-1(4410mil,4005.59mil) on Bottom (L4) [Bottom Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4386.2mil|Location2.X=4393.45mil|Location1.Y=3989.17mil|Location2.Y=3996.42mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4386.2mil|Location2.X=4393.45mil|Location1.Y=3989.17mil|Location2.Y=3996.42mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U10-2(4410mil,3980mil) on Bottom (L4) And Pad U10-1(4410mil,4005.59mil) on Bottom (L4) [Bottom Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4376.845mil|Location2.X=4384.095mil|Location1.Y=3979.82mil|Location2.Y=3987.07mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4376.845mil|Location2.X=4384.095mil|Location1.Y=3979.82mil|Location2.Y=3987.07mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U10-5(4350.94mil,3980mil) on Bottom (L4) And Pad U10-2(4410mil,3980mil) on Bottom (L4) [Bottom Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4386.2mil|Location2.X=4393.45mil|Location1.Y=3963.58mil|Location2.Y=3970.83mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4386.2mil|Location2.X=4393.45mil|Location1.Y=3963.58mil|Location2.Y=3970.83mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U10-3(4410mil,3954.41mil) on Bottom (L4) And Pad U10-2(4410mil,3980mil) on Bottom (L4) [Bottom Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4376.845mil|Location2.X=4384.095mil|Location1.Y=3954.23mil|Location2.Y=3961.48mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4376.845mil|Location2.X=4384.095mil|Location1.Y=3954.23mil|Location2.Y=3961.48mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.82mil &lt; 6mil) Between Pad U10-4(4350.94mil,3954.41mil) on Bottom (L4) And Pad U10-3(4410mil,3954.41mil) on Bottom (L4) [Bottom Solder] Mask Sliver [3.82mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4327.14mil|Location2.X=4334.39mil|Location1.Y=3963.58mil|Location2.Y=3970.83mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4327.14mil|Location2.X=4334.39mil|Location1.Y=3963.58mil|Location2.Y=3970.83mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U10-5(4350.94mil,3980mil) on Bottom (L4) And Pad U10-4(4350.94mil,3954.41mil) on Bottom (L4) [Bottom Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4327.14mil|Location2.X=4334.39mil|Location1.Y=3989.17mil|Location2.Y=3996.42mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4327.14mil|Location2.X=4334.39mil|Location1.Y=3989.17mil|Location2.Y=3996.42mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.81mil &lt; 6mil) Between Pad U10-6(4350.94mil,4005.59mil) on Bottom (L4) And Pad U10-5(4350.94mil,3980mil) on Bottom (L4) [Bottom Solder] Mask Sliver [3.81mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3546.087mil|Location2.X=3553.337mil|Location1.Y=1054.543mil|Location2.Y=1061.793mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3546.087mil|Location2.X=3553.337mil|Location1.Y=1054.543mil|Location2.Y=1061.793mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.811mil &lt; 6mil) Between Pad SW1-1(3512.771mil,1052.318mil) on Multi-Layer And Pad SW1-0(3594.43mil,1065.251mil) on Multi-Layer [Top Solder] Mask Sliver [3.811mil] / [Bottom Solder] Mask Sliver [3.811mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3316.663mil|Location2.X=3323.913mil|Location1.Y=1018.206mil|Location2.Y=1025.456mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3316.663mil|Location2.X=3323.913mil|Location1.Y=1018.206mil|Location2.Y=1025.456mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (3.811mil &lt; 6mil) Between Pad SW1-3(3357.229mil,1027.682mil) on Multi-Layer And Pad SW1-0(3275.57mil,1014.749mil) on Multi-Layer [Top Solder] Mask Sliver [3.811mil] / [Bottom Solder] Mask Sliver [3.811mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3874.133mil|Location2.X=3882.861mil|Location1.Y=2219.714mil|Location2.Y=2227.878mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3874.133mil|Location2.X=3882.861mil|Location1.Y=2219.714mil|Location2.Y=2227.878mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (2.786mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [2.786mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3891.85mil|Location2.X=3899.1mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3891.85mil|Location2.X=3899.1mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3911.535mil|Location2.X=3918.785mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3911.535mil|Location2.X=3918.785mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3931.22mil|Location2.X=3938.47mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3931.22mil|Location2.X=3938.47mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3950.905mil|Location2.X=3958.155mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3950.905mil|Location2.X=3958.155mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3970.59mil|Location2.X=3977.84mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3970.59mil|Location2.X=3977.84mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3990.275mil|Location2.X=3997.525mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3990.275mil|Location2.X=3997.525mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4009.96mil|Location2.X=4017.21mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4009.96mil|Location2.X=4017.21mil|Location1.Y=2221.61mil|Location2.Y=2228.86mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4027.677mil|Location2.X=4035.059mil|Location1.Y=2220.628mil|Location2.Y=2228.331mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4027.677mil|Location2.X=4035.059mil|Location1.Y=2220.628mil|Location2.Y=2228.331mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (2.786mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [2.786mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2202.91mil|Location2.Y=2210.16mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2202.91mil|Location2.Y=2210.16mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2183.225mil|Location2.Y=2190.475mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2183.225mil|Location2.Y=2190.475mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2163.54mil|Location2.Y=2170.79mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2163.54mil|Location2.Y=2170.79mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2143.855mil|Location2.Y=2151.105mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2143.855mil|Location2.Y=2151.105mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2124.17mil|Location2.Y=2131.42mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2124.17mil|Location2.Y=2131.42mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2104.485mil|Location2.Y=2111.735mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2104.485mil|Location2.Y=2111.735mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2084.8mil|Location2.Y=2092.05mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4028.665mil|Location2.X=4035.915mil|Location1.Y=2084.8mil|Location2.Y=2092.05mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4027.677mil|Location2.X=4036.406mil|Location1.Y=2066.169mil|Location2.Y=2074.332mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4027.677mil|Location2.X=4036.406mil|Location1.Y=2066.169mil|Location2.Y=2074.332mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (2.786mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [2.786mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4009.96mil|Location2.X=4017.21mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4009.96mil|Location2.X=4017.21mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3990.275mil|Location2.X=3997.525mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3990.275mil|Location2.X=3997.525mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3970.59mil|Location2.X=3977.84mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3970.59mil|Location2.X=3977.84mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3950.905mil|Location2.X=3958.155mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3950.905mil|Location2.X=3958.155mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3931.22mil|Location2.X=3938.47mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3931.22mil|Location2.X=3938.47mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3911.535mil|Location2.X=3918.785mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3911.535mil|Location2.X=3918.785mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3891.85mil|Location2.X=3899.1mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3891.85mil|Location2.X=3899.1mil|Location1.Y=2036.57mil|Location2.Y=2043.82mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3874.133mil|Location2.X=3881.515mil|Location1.Y=2067.082mil|Location2.Y=2074.786mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3874.133mil|Location2.X=3881.515mil|Location1.Y=2067.082mil|Location2.Y=2074.786mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (2.786mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [2.786mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2084.8mil|Location2.Y=2092.05mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2084.8mil|Location2.Y=2092.05mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2104.485mil|Location2.Y=2111.735mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2104.485mil|Location2.Y=2111.735mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2124.17mil|Location2.Y=2131.42mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2124.17mil|Location2.Y=2131.42mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2143.855mil|Location2.Y=2151.105mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2143.855mil|Location2.Y=2151.105mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2163.54mil|Location2.Y=2170.79mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2163.54mil|Location2.Y=2170.79mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2183.225mil|Location2.Y=2190.475mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2183.225mil|Location2.Y=2190.475mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.9mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.9mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2202.91mil|Location2.Y=2210.16mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\work\fota-hardware\PCB\mbed-enablement-platform_F.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.625mil|Location2.X=3850.875mil|Location1.Y=2202.91mil|Location2.Y=2210.16mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (5.91mil &lt; 6mil) Between Region (0 hole(s)) Top Solder And Region (0 hole(s)) Top Solder [Top Solder] Mask Sliver [5.91mil]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br></body>
+</html>

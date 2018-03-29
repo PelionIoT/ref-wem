@@ -1,0 +1,15 @@
+*************************************************************
+FileName = mbed-enablement-platform_F.GBR
+AutoAperture = True
+*************************************************************
+Generating : Top Overlay
+      File : mbed-enablement-platform_F.GTO
+
+    Adding Layer      : Top Overlay
+
+
+Used DCodes :
+    D10
+    D11
+*************************************************************
+

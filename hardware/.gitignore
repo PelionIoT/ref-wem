@@ -1,0 +1,14 @@
+# SolidWorks lock files
+CAD/~$*.SLDPRT
+CAD/~$*.sldprt
+CAD/~$*.SLDASM
+CAD/~$*.sldasm
+
+# Mac nonsense
+.DS_Store
+
+# STL files in the wrong place
+CAD/*.STL
+
+# EagleCAD lock files
+PCB/*.lck
