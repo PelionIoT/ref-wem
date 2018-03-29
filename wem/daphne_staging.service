@@ -1,0 +1,14 @@
+[Unit]
+Description=Daphne Server(Staging)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/home/wem/wem_staging
+ExecStart=/home/wem/.virtualenvs/wem_staging/bin/daphne --port 8001 wem.asgi_staging:channel_layer
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

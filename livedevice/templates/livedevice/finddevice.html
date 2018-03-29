@@ -1,0 +1,239 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}Find Live Devices{% endblock %}
+
+{% block body_class %}livedevice{% endblock %}
+
+{% block body_base %}
+  <section>
+      <div class="container">
+        <a href="/live-device/">Live Device</a>
+      </div>
+      <div class="container">
+        <h1>Find Device</h1>
+        <div id="map" style="height: 800px;"></div>
+      </div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+      integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+      crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+    integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+    crossorigin="">
+  </script>
+
+  <script>
+    var boards = {};
+
+    // Specify handlers for various resource patterns.  The key should match a prefix of the resource name.
+    var resourceConfig = {
+        '/26241/0/1': {
+            handler: handleAppLabel
+        },
+        '/3336/': {
+            handler: handleGeoUpdate
+        },
+    }
+
+    function handleGeoUpdate(board, update) {
+        var resource_path = update.sensor;
+        board['sensors'][resource_path] = update.value;
+
+        /* as a first step, clean up any existing marker for this board.
+           to allow us to handle marker delete in the case that a marker
+           is no longer complete, for example if a board admin deletes
+           user-configured geo resources. */
+        var marker = board['marker'];
+        if (typeof marker !== 'undefined') {
+            removeMarker(marker);
+            delete board['marker'];
+        }
+
+        /* the app sends 2 /3336 instances which are distinguished
+           by the 'Application Type' resource specified with ID 5750. */
+        var instance0_is_complete = geoIsComplete(board['sensors'], '/3336/0');
+        var instance1_is_complete = geoIsComplete(board['sensors'], '/3336/1');
+
+        var geoInstance = -1;
+        if (instance0_is_complete && instance1_is_complete) {
+            var type0 = board['sensors']['/3336/0/5750'];
+            var type1 = board['sensors']['/3336/1/5750'];
+            // need to arbitrate:  'user' takes precedence over 'auto'
+            if ('user' === type0) {
+                geoInstance = 0;
+            } else {
+                if ('user' === type1) {
+                    geoInstance = 1;
+                } else {
+                    // choose instance 0 if both are 'auto'
+                    geoInstance = 0;
+                }
+            }
+        } else if (instance0_is_complete) {
+            geoInstance = 0;
+        } else if (instance1_is_complete) {
+            geoInstance = 1;
+        }
+
+        if (geoInstance < 0) {
+            /* no plottable geo yet */
+            return;
+        }
+
+        var lat = board['sensors']["/3336/" + geoInstance + "/5514"];
+        var lng = board['sensors']["/3336/" + geoInstance + "/5515"];
+        var acc = board['sensors']["/3336/" + geoInstance + "/5516"];
+
+        board['marker'] = addMarker(board.label, lat, lng, acc);
+    }
+
+    function geoIsComplete(sensors, path_prefix) {
+        var resources = ["5514", "5515", "5516", "5750"];
+        for (var i = 0; i < resources.length; i++) {
+            var path = path_prefix + "/" + resources[i];
+            if (!(path in sensors)) {
+                return false;
+            }
+            if ('-' == sensors[path] || '' == sensors[path]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function getResourceConfig(resource_path) {
+        if (resource_path in resourceConfig) {
+            return resourceConfig[resource_path];
+        }
+        /* didn't find an exact match, look for more generic paths */
+        var i = resource_path.lastIndexOf('/');
+        while (i >= 0) {
+            /* try trailing slash */
+            var path = resource_path.slice(0, i + 1);
+            if (path in resourceConfig) {
+                return resourceConfig[path];
+            }
+            /* try no trailing slash */
+            path = resource_path.slice(0, i);
+            if (path in resourceConfig) {
+                return resourceConfig[path];
+            }
+            /* move to next slash */
+            i = path.lastIndexOf('/');
+        }
+    }
+
+    // Change a board ID based on a notification
+    function handleAppLabel(board, data) {
+        if (!('value' in data)) {
+            return;
+        }
+        var label = data.value;
+        if (label.length > 0) {
+            board.label = label;
+        } else {
+            board.label = board.boardId;
+        }
+    }
+
+    // Add a new board to the map
+    function addBoard(boardId) {
+        var board = {boardId: boardId, label: boardId, sensors: {}};
+        boards[boardId] = board;
+        return board;
+    }
+
+    // Handle an update message on the WebSocket
+    function wsOnUpdateBoard(update) {
+        var config = getResourceConfig(update.sensor);
+        if (typeof config === 'undefined') {
+            return;
+        }
+        var board = boards[update.board];
+        if (typeof board === 'undefined') {
+            board = addBoard(update.board);
+        }
+        config.handler(board, update);
+    }
+
+    // Remove a board from the map
+    function removeBoard(boardId) {
+        var board = boards[boardId];
+        if (typeof board === 'undefined') {
+            return;
+        }
+        if ('marker' in board) {
+            removeMarker(board['marker']);
+        }
+        delete boards[boardId];
+    }
+
+    function addMarker(title, lat, lng, acc) {
+        var marker = L.marker([lat, lng], {title: title});
+        marker.bindPopup(function(layer) {
+            var latlng = layer.getLatLng();
+            var msg = "<b>" + title + "</b>";
+            msg += "<br>lat: " + latlng.lat;
+            msg += "<br>long: " + latlng.lng;
+            return msg;
+        });
+        /* regarding the magic number, search for "Decimal degrees"
+           on wikipedia */
+        if (acc > 111320) {
+            /* max possible uncertainy expressed by 0 decimal places */
+            acc = 111320;
+        }
+        var circle = L.circle([lat, lng], {radius: acc});
+        console.log("add marker: title=" + title + ", lat=" + lat
+                    + ", long=" + lng);
+        circle.addTo(mymap);
+        marker.addTo(mymap);
+        return [marker, circle];
+    }
+
+    function removeMarker(marker) {
+        var latlng = marker[0].getLatLng();
+        console.log("del marker: lat=" + latlng.lat + ", long=" + latlng.lng);
+        marker[0].remove();
+        marker[1].remove();
+    }
+
+    function wsOnRemoveBoard(boardId) {
+        removeBoard(boardId);
+    }
+
+    if (window.location.protocol == "http:") {
+        ws_scheme = "ws";
+    } else {
+        ws_scheme = "wss";
+    }
+
+    socket = new WebSocket(ws_scheme + "://" + window.location.host + "/livedevice/");
+    // Entry point for websocket messages
+    socket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        if (data.type == 'update') {
+            wsOnUpdateBoard(data['update']);
+        } else if (data.type == 'remove-board') {
+            wsOnRemoveBoard(data.board);
+        }
+    }
+
+    var mymap = L.map('map').setView([30.2672, -97.7431], 2);
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(mymap);
+
+    $(document).ready(function() {
+        console.log("loading world map");
+    });
+  </script>
+{% endblock %}

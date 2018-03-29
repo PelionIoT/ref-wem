@@ -1,0 +1,21 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block submit_buttons_bottom %}
+{% if change %}
+    <div class="submit-row">
+       {% if original.webhook_callback_set %}
+       <input type="submit" value="{% trans 'Delete webhook callback' %}" name="_deletewebhookcallback" />
+       {% else %}
+       <input type="submit" value="{% trans 'Set webhook callback' %}" name="_setwebhookcallback" />
+       {% endif %}
+       {% if original.is_long_polling %}
+       <input type="submit" value="{% trans 'Stop long poll' %}" name="_stoplongpoll" />
+       {% else %}
+       <input type="submit" value="{% trans 'Start long poll' %}" name="_startlongpoll" />
+       {% endif %}
+    </div>
+{% endif %}
+
+    {{ block.super }}
+{% endblock %}
