@@ -1,0 +1,351 @@
+{% extends "site_base.html" %} {% load i18n %} {% block head_title %}Live Device{% endblock %} {% block body_class %}livedevice{% endblock %} {% block body_base %}
+<section>
+  <div class="container">
+    <a href="find/">Find Device</a>
+  </div>
+  <div class="container">
+    <h1>Live Device</h1>
+    <div id="charts"></div>
+  </div>
+</section>
+{% endblock %} {% block scripts %} {{ block.super }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinycolor/1.4.1/tinycolor.min.js"></script>
+
+<script>
+  var chartMemory = 120; // seconds
+  var samplingPeriod = 5000; // milliseconds per sample
+  var interpolationGracePeriod = 500; // milliseconds.  If real data is late by more, we interpolate it.
+  var frameRate = 30; // FPS
+
+  // Colors of line graphs
+  // Note that this is an array of arrays so more than one palette can be defined.
+  var palettes = [["maroon", "red", "olive", "gold", "green", "lime", "teal", "cornflowerblue", "navy", "blue", "purple"]]
+
+  var boards = {};
+
+  // Sensors to plot are defined here.  Add a config here if you want another graph.
+  // Element and chart are null because they get populated later.
+  var chartsConfig = {
+    '/3303/0/5700': {
+      title: 'Temperature',
+      element: null,
+      chart: null,
+      colors: palettes[0],
+      min: 20,
+      max: 30,
+      label: "degrees C"
+    },
+    '/3301/0/5700': {
+      title: 'Light',
+      element: null,
+      chart: null,
+      colors: palettes[0],
+      min: 0,
+      max: 10000,
+      label: "intensity (lux)"
+    },
+    '/3304/0/5700': {
+      title: 'Humidity',
+      element: null,
+      chart: null,
+      colors: palettes[0],
+      min: 0,
+      max: 100,
+      label: "relative humidity(RH)"
+    }
+  }
+
+  // These resources don't need to be graphed, but still need processing.
+  var unchartedResourceConfig = {
+    '/26241/0/1': {
+      handler: handleAppLabel
+    }
+  }
+
+  // Rename a board
+  function handleAppLabel(data) {
+    board = boards[data.board]
+    if (board === undefined) {
+      board = addBoard(data.board);
+    }
+    board.label = data.value;
+    for (config in chartsConfig) {
+      sensor = chartsConfig[config];
+      if (sensor.chart === undefined) {
+        continue;
+      }
+      for (index in sensor.chart.data.datasets) {
+        dataset = sensor.chart.data.datasets[index];
+        if (dataset.boardId == board.boardId) {
+          dataset.label = board.label;
+        }
+        sensor.chart.update();
+      }
+    }
+  }
+
+  // This hash is used to consistently map a board to a color.
+  function hashCode(s) {
+    var h = 0, l = s.length, i = 0;
+    if (l > 0)
+      while (i < l)
+        h = (h << 5) - h + s.charCodeAt(i++) | 0;
+    return h;
+  };
+
+  function addChart(config) {
+    var chartsElem = document.getElementById('charts');
+    var containerElem = document.createElement("div");
+    var canvasElem = document.createElement("canvas");
+
+    containerElem.className = "chart-container";
+    containerElem.style.position = "relative";
+    containerElem.style.height = "30em";
+    chartsElem.appendChild(containerElem);
+
+    canvasElem.id = config.title.toLowerCase() + "Chart";
+    containerElem.appendChild(canvasElem);
+
+    var ctx = canvasElem.getContext('2d');
+
+    var chart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: 'line',
+
+      // The data for our dataset
+      data: {
+        datasets: []
+      },
+
+      // Configuration options go here
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+          duration: 1000 / frameRate,
+          easing: 'linear'
+        },
+        title: {
+          display: true,
+          text: config.title,
+          fontSize: 28,
+        },
+        scales: {
+          xAxes: [{
+            type: 'time',
+            time: {
+              unit: 'second',
+              displayFormats: {
+                second: 'hh:mm:ss.S'
+              },
+            },
+            afterBuildTicks: function (axis) {
+              var newTicks = [axis.min, axis.max];
+              axis.ticks = newTicks;
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              suggestedMin: config.min,
+              suggestedMax: config.max,
+            },
+            scaleLabel: {
+              display: true,
+              labelString: config.label
+            }
+          }]
+        }
+      }
+    });
+
+    adjustXAxis(chart);
+
+    // Set up per-frame updates for the charts
+    setInterval(function () {
+      removeOldData(config);
+      interpolate(chart);
+      adjustXAxis(chart);
+    }, 1000 / frameRate);
+
+    config['element'] = canvasElem;
+    config['chart'] = chart;
+  }
+
+  // Update the X-axis of the chart every frame to produce a scrolling effect.
+  function adjustXAxis(chart) {
+    chart.options.scales.xAxes[0].time.min = Date.now() - chartMemory * 1000;
+    chart.options.scales.xAxes[0].time.max = Date.now();
+    chart.update()
+  }
+
+  // When data scrolls off of the left side, we remove those data points.
+  function removeOldData(config) {
+    var chart = config.chart;
+    var cutOff = Date.now() - chartMemory * 1000;
+    for (var i = 0; i < chart.data.datasets.length; i++) {
+      var ds = chart.data.datasets[i];
+      while (ds.data.length > 0 && ds.data[0].x < cutOff) {
+        ds.data.shift();
+        if (ds.data.length == 0) {
+          // delete empty dataset
+          chart.data.datasets.splice(i, 1);
+          config.colors.push(ds.borderColor);
+          break
+        }
+      }
+    }
+  }
+
+  function addBoard(boardId) {
+    board = { boardId: boardId, label: boardId };
+    boards[boardId] = board;
+    return board;
+  }
+
+  function addBoardToChart(config, chart, boardId, ctx) {
+    var color;
+    var board = boards[boardId];
+    if (board === undefined) {
+      board = addBoard(boardId);
+    }
+    if (board.color === undefined) {
+      console.log(config.title + ": colors.length: " + config.colors.length);
+      color = config.colors[Math.abs(hashCode(boardId)) % config.colors.length];
+      console.log(config.title + ": color for " + boardId + " is " + color);
+      board.color = color
+      config.colors.splice(config.colors.indexOf(color), 1);
+    } else {
+      color = board.color;
+    }
+    var fillColor = tinycolor(color).setAlpha(0.3);
+    var gradient = ctx.createLinearGradient(0, 0, 0, 470);
+    gradient.addColorStop(0, fillColor);
+    gradient.addColorStop(1, fillColor.clone().setAlpha(0));
+    var dataset = {
+      label: board.label,
+      boardId: board.boardId,
+      backgroundColor: gradient,
+      borderColor: color,
+      data: [],
+      lineTension: 0,
+      fill: true
+    }
+    chart.data.datasets.push(dataset);
+    chart.data.datasets.sort(function (a, b) {
+      return a.label < b.label ? -1 : 1;
+    })
+    return dataset
+  }
+
+  function removeBoard(chart, boardId, config) {
+    if (boardId in boards) {
+      color = boards[boardId].color;
+      console.log(config.title + ": putting " + color + " back.")
+      config.colors.push(color);
+      delete boards[boardId];
+    }
+    for (index in chart.data.datasets) {
+      if (chart.data.datasets[index].boardId == boardId) {
+        console.log(config.title + ': removing dataset', index);
+        chart.data.datasets.splice(index, 1);
+      }
+      // Calling update() here prevents a crash in chart.js
+      chart.update();
+    }
+  }
+
+  /* Mbed Cloud doesn't forward data to us when a resource stays at the same value.
+  Since we know that our device always sends an update every sampling period, we can
+  infer that missing updates are due to the value staying the same.  This function
+  will add theose missing points to the graph.  This makes the graph correctly show
+  a horizontal line segment during period of no change. */
+  function interpolate(chart) {
+    var now = moment();
+    for (var dataset of chart.data.datasets) {
+      if (dataset.data && dataset.data.length > 0) {
+        while (lastPoint = dataset.data[dataset.data.length - 1],
+          now.diff(lastPoint.x) > samplingPeriod + interpolationGracePeriod) {
+          var point = { x: lastPoint.x.clone().add(samplingPeriod), y: lastPoint.y };
+          console.log('interpolated: ', point);
+          dataset.data.push(point);
+        }
+      }
+    }
+  }
+
+  function handleUnchartedResource(data) {
+    var config = unchartedResourceConfig[data.sensor];
+    if (!config) {
+      return;
+    }
+    config.handler(data);
+  }
+
+  // Note that the path doesn't matter right now; any WebSocket
+  // connection gets bumped over to WebSocket consumers
+  if (window.location.protocol == "http:") {
+    ws_scheme = "ws";
+  } else {
+    ws_scheme = "wss";
+  }
+
+  socket = new WebSocket(ws_scheme + "://" + window.location.host + "/livedevice/");
+
+  socket.onmessage = function (e) {
+    var data = JSON.parse(e.data);
+    console.log(data);
+
+    if (data.type == 'update') {
+      var data = data['update'];
+      var config = chartsConfig[data.sensor];
+      if (!config) {
+        /* no chart for this sensor. before returning, see if the
+           chart contains other interesting info */
+        handleUnchartedResource(data);
+        return;
+      }
+
+      var chart = config.chart;
+      var dataset = null;
+      for (var i = 0; i < chart.data.datasets.length; i++) {
+        if (chart.data.datasets[i].boardId == data.board) {
+          dataset = chart.data.datasets[i];
+        }
+      }
+      if (dataset === null) {
+        var canvasElem = config.element;
+        var ctx = canvasElem.getContext('2d');
+        dataset = addBoardToChart(config, chart, data.board, ctx);
+      }
+
+      var now = moment();
+      // Remove nearby points, such as interpolation
+      while (dataset.data.length > 0 && Math.abs(dataset.data[dataset.data.length - 1].x.diff(now)) < samplingPeriod * 0.9) {
+        dataset.data.pop();
+      }
+      var point = { x: now, y: data.value };
+      dataset.data.push(point);
+
+      adjustXAxis(chart);
+      chart.update();
+    } else if (data.type == 'add-board') {
+      var board = data.board;
+      // Handle adding new lines to graphs in sensor, for more robustness
+    } else if (data.type == 'remove-board') {
+      var board = data.board;
+      for (sensor in chartsConfig) {
+        removeBoard(chartsConfig[sensor].chart, board, chartsConfig[sensor]);
+      }
+    }
+  }
+
+  $(document).ready(function () {
+    console.log("adding charts");
+    $.each(chartsConfig, function (sensorId, config) {
+      addChart(config);
+    });
+  });
+
+</script> {% endblock %}

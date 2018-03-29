@@ -1,0 +1,34 @@
+[
+    {
+        "model": "sites.site",
+        "pk": 1,
+        "fields": {
+            "domain": "localhost:8000",
+            "name": "example.com [localhost]"
+        }
+    },
+    {
+        "model": "sites.site",
+        "pk": 2,
+        "fields": {
+            "domain": "example.com",
+            "name": "example.com"
+        }
+    },
+    {
+        "model": "livedevice.sitescheme",
+        "pk": 1,
+        "fields": {
+            "site": 1,
+            "scheme": "http"
+        }
+    },
+    {
+        "model": "livedevice.sitescheme",
+        "pk": 2,
+        "fields": {
+            "site": 2,
+            "scheme": "https"
+        }
+    }
+]

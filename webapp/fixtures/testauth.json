@@ -1,0 +1,10 @@
+[
+{
+    "model": "livedevice.webhookauth",
+    "pk": 1,
+    "fields": {
+        "api_key": "foobar",
+        "mbed_cloud_account": null
+    }
+}
+]

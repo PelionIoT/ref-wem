@@ -1,0 +1,15 @@
+[Unit]
+Description=Workspace Environment Monitor Delay
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/home/wem/wem
+Environment=DJANGO_SETTINGS_MODULE=wem.settings.production
+ExecStart=/home/wem/.virtualenvs/wem/bin/python manage.py rundelay
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

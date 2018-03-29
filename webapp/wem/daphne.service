@@ -1,0 +1,14 @@
+[Unit]
+Description=Daphne Server
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/home/wem/wem
+ExecStart=/home/wem/.virtualenvs/wem/bin/daphne wem.asgi_production:channel_layer
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
