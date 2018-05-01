@@ -1,3 +1,0 @@
-mbed-cli==1.2.2
-git+ssh://git@github.com/ARMmbed/manifest-tool-restricted.git@v1.2
-git+ssh://git@github.com/ARMmbed/mbed-cloud-update-cli.git

@@ -1,0 +1,12 @@
+[submodule "doc"]
+	path = doc
+	url = git@github.com:ARMmbed/ref-wem-doc.git
+[submodule "firmware"]
+	path = firmware
+	url = git@github.com:ARMmbed/ref-wem-firmware.git
+[submodule "hardware"]
+	path = hardware
+	url = git@github.com:ARMmbed/ref-wem-hardware.git
+[submodule "webapp"]
+	path = webapp
+	url = git@github.com:ARMmbed/ref-wem-webapp.git
